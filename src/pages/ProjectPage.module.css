@@ -1,0 +1,134 @@
+.main {
+  padding-top: 8rem;
+  padding-bottom: 4rem;
+  min-height: 100vh;
+}
+
+.back {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 2.5rem;
+  transition: color 0.2s;
+}
+
+.back:hover { color: var(--text); }
+
+.header {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.status {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius);
+  border: 1px solid;
+}
+
+.status.shipped {
+  color: var(--accent);
+  border-color: rgba(200, 240, 74, 0.25);
+  background: var(--accent-dim);
+}
+
+.status.wip {
+  color: #f0a030;
+  border-color: rgba(240, 160, 48, 0.25);
+  background: rgba(240, 160, 48, 0.06);
+}
+
+.tag {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius);
+  letter-spacing: 0.04em;
+}
+
+.title {
+  font-size: clamp(2rem, 6vw, 3rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin-bottom: 0.6rem;
+}
+
+.tagline {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* ── Body ── */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  max-width: 600px;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.sectionLabel {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 400;
+  padding-top: 0.2rem;
+}
+
+.section p {
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+.placeholder {
+  color: var(--text-dim) !important;
+  font-style: italic;
+}
+
+.liveLink {
+  grid-column: 2;
+  color: var(--accent);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s;
+}
+
+.liveLink:hover { opacity: 0.7; }
+
+.notFound {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 540px) {
+  .section {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .liveLink { grid-column: 1; }
+}

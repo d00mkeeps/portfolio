@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  portfolio:
+    build: .
+    container_name: miles-portfolio
+    restart: unless-stopped
+    ports:
+      - "3000:80"   # change to "80:80" when pointing volc.uk at this box
+    labels:
+      - "traefik.enable=false"   # remove if using Traefik for SSL termination
+
+# To run:
+#   docker compose up -d --build
+#
+# For SSL via Let's Encrypt, terminate at host nginx or use Traefik/Caddy
+# in front of this container. The container itself serves plain HTTP on :3000.
