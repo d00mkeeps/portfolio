@@ -8,10 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Cloudflared
-        run: |
-          curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-          sudo dpkg -i cloudflared.deb
 
       - name: Deploy via Cloudflare Tunnel
         env:
@@ -21,17 +17,13 @@ jobs:
         run: |
           if [ -z "$SSH_HOSTNAME" ] || [ -z "$SERVER_USER" ] || [ -z "$SSH_PRIVATE_KEY" ]; then
             echo "Error: One or more deployment secrets are missing!"
-            echo "Please ensure VOLCANO_SSH_HOSTNAME, SERVER_USER, and SSH_PRIVATE_KEY are set in GitHub Secrets."
             exit 1
           fi
-          
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
-
           ssh -i ~/.ssh/id_deploy \
-              -o "ProxyCommand=cloudflared access ssh --hostname $SSH_HOSTNAME" \
               -o "StrictHostKeyChecking=no" \
               -o "ConnectTimeout=30" \
-              -T "$SERVER_USER@$SSH_HOSTNAME" \
-              "cd /portfolio && git pull origin main && docker compose up -d --build"
+              "$SERVER_USER@$SSH_HOSTNAME" \
+              "cd /home/miles/portfolio && git pull origin main && docker compose up -d --build"
