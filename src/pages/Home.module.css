@@ -9,89 +9,46 @@
   padding: 0 var(--gutter);
 }
 
-/* ── Cards ── */
-.cardsSection {
-  margin-bottom: 5rem;
-}
-
-.cardsRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-}
-
-.cardWrap {
-  background: var(--bg);
-  padding: 2rem;
-  min-height: 320px;
-}
-
-.cardsMobileScroll { display: none; }
-
-/* ── Body ── */
-.body {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 4rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-}
-
-.copy {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  line-height: 1.75;
-  max-width: 480px;
-}
-
-.availDot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-  flex-shrink: 0;
-  margin-top: 0.45rem;
-  animation: pulse 2s ease infinite;
-}
-
-/* ── Page nav ── */
-.pageNav {
+/* ── Bio ── */
+.bio {
+  padding: 4rem 0 5rem;
+  border-bottom: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  margin-bottom: 6rem;
-  border-top: 1px solid var(--border);
+  gap: 2rem;
 }
 
-.pageNavLink {
+.bioLines {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid var(--border);
-  transition: opacity 0.2s;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
-.pageNavLink:hover { opacity: 0.5; }
-
-.pageNavLabel {
-  font-family: var(--font-serif);
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  color: var(--text);
-  letter-spacing: -0.02em;
-}
-
-.pageNavArrow {
-  font-size: 1.25rem;
+.bioLine {
+  font-size: 0.88rem;
   color: var(--text-muted);
+  line-height: 1.7;
 }
+
+.bioLine:first-child {
+  color: var(--text);
+}
+
+.bookCall {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s;
+  align-self: flex-start;
+}
+
+.bookCall:hover { opacity: 0.7; }
 
 /* ── Projects ── */
 .projects {
-  padding: 4rem 0 6rem;
-  border-top: 1px solid var(--border);
+  padding: 4rem 0 2rem;
 }
 
 .sectionLabel {
@@ -99,44 +56,216 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-muted);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
+/* ── Grid ── */
 .grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
 }
 
-/* ── Animations ── */
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 6px var(--accent); opacity: 1; }
-  50% { box-shadow: 0 0 14px var(--accent); opacity: 0.7; }
+/* ── Card base ── */
+.card {
+  background: var(--bg);
+  padding: 2rem;
+  min-height: 320px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.25s;
+}
+
+.card:hover {
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Clear Box card ── */
+.cardWide {
+  grid-column: span 2;
+  min-height: 340px;
+}
+
+.cardClearBox {
+  background:
+    radial-gradient(ellipse 420px 320px at 28% 55%, rgba(37, 99, 235, 0.22) 0%, transparent 70%),
+    var(--bg);
+  overflow: hidden;
+}
+
+.clearBoxInner {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex: 1;
+}
+
+.clearBoxLeft {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+}
+
+.clearBoxRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* ── Cube ── */
+.cubeCanvas {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+/* ── Empty cards ── */
+.cardEmpty {
+  opacity: 0.6;
+}
+
+.cardPlaceholder {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  font-style: italic;
+  font-family: var(--font-serif);
+}
+
+/* ── Card elements ── */
+.cardDate {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.cardName {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.cardStatus {
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius);
+  border: 1px solid;
+}
+
+.statusShipped {
+  color: var(--accent);
+  border-color: var(--accent-mid);
+  background: var(--accent-dim);
+}
+
+.cardCopy {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.cardLink {
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s;
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.cardLink:hover { opacity: 0.7; }
+
+/* ── Blog ── */
+.blog {
+  padding: 4rem 0 6rem;
+  border-top: 1px solid var(--border);
+  margin-top: 1px;
+}
+
+.blogGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+}
+
+.cardBlog {
+  min-height: 200px;
+}
+
+.blogMeta {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.blogTag {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius);
+  letter-spacing: 0.04em;
+  font-family: var(--font-mono);
+}
+
+.blogTitle {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.blogSummary {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.65;
 }
 
 /* ── Mobile ── */
 @media (max-width: 680px) {
-  .cardsRow { display: none; }
-  .cardsMobileScroll {
-    display: block;
-    overflow-x: auto;
-    margin: 0 calc(-1 * var(--gutter));
-    padding: 0 var(--gutter);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+  .grid {
+    grid-template-columns: 1fr;
   }
-  .cardsMobileScroll::-webkit-scrollbar { display: none; }
-  .cardsMobileInner {
-    display: flex;
-    gap: 1px;
-    background: var(--border);
-    width: max-content;
+
+  .cardWide {
+    grid-column: span 1;
   }
-  .cardWrapMobile {
-    background: var(--bg);
-    padding: 1.5rem;
-    width: 80vw;
-    min-height: 300px;
-    flex-shrink: 0;
+
+  .clearBoxInner {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .clearBoxLeft {
+    width: 100%;
+  }
+
+  .blogGrid {
+    grid-template-columns: 1fr;
   }
 }
