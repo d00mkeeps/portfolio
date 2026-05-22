@@ -85,15 +85,14 @@
 }
 
 .subOptActive {
-  color: var(--text);
-  opacity: 0.75;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3), 0 0 2px rgba(255, 255, 255, 0.15);
-}
-
-.subOptActive:hover {
   color: var(--text) !important;
   opacity: 1 !important;
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 5px rgba(255, 255, 255, 0.3), 0 0 2px rgba(255, 255, 255, 0.2) !important;
+}
+
+.subOptActiveHoverDim:hover {
+  opacity: 0.65 !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.2) !important;
 }
 
 .domainWrapper {

@@ -194,6 +194,7 @@ function LogoSquare({ children, small }) {
 export default function LinkBuilder() {
   const [domIdx, setDomIdx] = useState(0)
   const [subIdx, setSubIdx] = useState(0)
+  const [hasHoverLeftActiveSub, setHasHoverLeftActiveSub] = useState(true)
 
   const domain = DOMAINS[domIdx]
   const sub = domain.subs[subIdx]
@@ -202,6 +203,7 @@ export default function LinkBuilder() {
     setDomIdx(i => {
       const next = (i + dir + DOMAINS.length) % DOMAINS.length
       setSubIdx(0)
+      setHasHoverLeftActiveSub(true)
       return next
     })
   }, [])
@@ -220,17 +222,27 @@ export default function LinkBuilder() {
           <span className={styles.bracket}>[</span>
           {domain.subs.filter(s => s.slug !== '').map((s, idx) => {
             const isSelected = sub.slug === s.slug
+            const activeClass = isSelected
+              ? `${styles.subOptActive} ${hasHoverLeftActiveSub ? styles.subOptActiveHoverDim : ''}`
+              : ''
             return (
               <React.Fragment key={s.slug}>
                 {idx > 0 && <span className={styles.comma}>,</span>}
                 <span
-                  className={`${styles.subOpt} ${isSelected ? styles.subOptActive : ''}`}
+                  className={`${styles.subOpt} ${activeClass}`}
                   onClick={() => {
                     if (isSelected) {
                       setSubIdx(0)
+                      setHasHoverLeftActiveSub(true)
                     } else {
                       const realIdx = domain.subs.findIndex(subItem => subItem.slug === s.slug)
                       setSubIdx(realIdx)
+                      setHasHoverLeftActiveSub(false)
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    if (isSelected) {
+                      setHasHoverLeftActiveSub(true)
                     }
                   }}
                 >
