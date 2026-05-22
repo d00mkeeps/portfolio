@@ -164,23 +164,25 @@ export default function LinkBuilder() {
 
         <span className={styles.dot}>.</span>
 
-        <Drum
-          items={DOMAINS}
-          activeIdx={domIdx}
-          onCycle={cycleDom}
-          itemKey={d => d.label}
-          renderItem={d => d.label.split('.')[0]}
-        />
+        <div className={styles.domainWrapper}>
+          <Drum
+            items={DOMAINS}
+            activeIdx={domIdx}
+            onCycle={cycleDom}
+            itemKey={d => d.label}
+            renderItem={d => d.label.split('.')[0]}
+          />
 
-        <span className={styles.dot}>.</span>
+          <span className={styles.dot}>.</span>
 
-        <Drum
-          items={DOMAINS}
-          activeIdx={domIdx}
-          onCycle={cycleDom}
-          itemKey={d => d.label + '-suffix'}
-          renderItem={d => d.label.split('.')[1]}
-        />
+          <Drum
+            items={DOMAINS}
+            activeIdx={domIdx}
+            onCycle={cycleDom}
+            itemKey={d => d.label + '-suffix'}
+            renderItem={d => d.label.split('.')[1]}
+          />
+        </div>
       </div>
 
       {/* ── Project info ── */}

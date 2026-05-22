@@ -44,18 +44,38 @@
 }
 
 /* subdomain drum */
-.urlBar .drum:nth-of-type(1) {
+.urlBar > .drum {
   width: 90px;
 }
 
+.domainWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
 /* domain prefix drum */
-.urlBar .drum:nth-of-type(2) {
+.domainWrapper .drum:nth-of-type(1) {
   width: 140px;
 }
 
+.domainWrapper .drum:nth-of-type(1) .drumItem {
+  justify-content: flex-end;
+  padding-right: 0.15rem;
+}
+
 /* suffix drum */
-.urlBar .drum:nth-of-type(3) {
+.domainWrapper .drum:nth-of-type(2) {
   width: 60px;
+}
+
+.domainWrapper .drum:nth-of-type(2) .drumItem {
+  justify-content: flex-start;
+  padding-left: 0.15rem;
+}
+
+.domainWrapper .dot {
+  padding: 0;
 }
 
 .drumFadeTop,
@@ -246,9 +266,9 @@
     gap: 0.3rem;
   }
 
-  .urlBar .drum:nth-of-type(1) { width: 76px; }
-  .urlBar .drum:nth-of-type(2) { width: 110px; }
-  .urlBar .drum:nth-of-type(3) { width: 45px; }
+  .urlBar > .drum { width: 76px; }
+  .domainWrapper .drum:nth-of-type(1) { width: 110px; }
+  .domainWrapper .drum:nth-of-type(2) { width: 45px; }
 
   .infoPanel { max-width: 100%; padding: 0 var(--gutter); }
 }
