@@ -95,6 +95,13 @@
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.2) !important;
 }
 
+.subOptJustDeselected,
+.subOptJustDeselected:hover {
+  opacity: 0.45 !important;
+  color: var(--text-muted) !important;
+  text-shadow: none !important;
+}
+
 .domainWrapper {
   display: flex;
   align-items: center;

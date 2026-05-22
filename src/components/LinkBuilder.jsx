@@ -195,6 +195,7 @@ export default function LinkBuilder() {
   const [domIdx, setDomIdx] = useState(0)
   const [subIdx, setSubIdx] = useState(0)
   const [hasHoverLeftActiveSub, setHasHoverLeftActiveSub] = useState(true)
+  const [justDeselectedSlug, setJustDeselectedSlug] = useState(null)
 
   const domain = DOMAINS[domIdx]
   const sub = domain.subs[subIdx]
@@ -204,6 +205,7 @@ export default function LinkBuilder() {
       const next = (i + dir + DOMAINS.length) % DOMAINS.length
       setSubIdx(0)
       setHasHoverLeftActiveSub(true)
+      setJustDeselectedSlug(null)
       return next
     })
   }, [])
@@ -222,27 +224,38 @@ export default function LinkBuilder() {
           <span className={styles.bracket}>[</span>
           {domain.subs.filter(s => s.slug !== '').map((s, idx) => {
             const isSelected = sub.slug === s.slug
-            const activeClass = isSelected
-              ? `${styles.subOptActive} ${hasHoverLeftActiveSub ? styles.subOptActiveHoverDim : ''}`
-              : ''
+            const isJustDeselected = justDeselectedSlug === s.slug
+
+            let optionClass = ''
+            if (isSelected) {
+              optionClass = `${styles.subOptActive} ${hasHoverLeftActiveSub ? styles.subOptActiveHoverDim : ''}`
+            } else if (isJustDeselected) {
+              optionClass = styles.subOptJustDeselected
+            }
+
             return (
               <React.Fragment key={s.slug}>
                 {idx > 0 && <span className={styles.comma}>,</span>}
                 <span
-                  className={`${styles.subOpt} ${activeClass}`}
+                  className={`${styles.subOpt} ${optionClass}`}
                   onClick={() => {
                     if (isSelected) {
                       setSubIdx(0)
                       setHasHoverLeftActiveSub(true)
+                      setJustDeselectedSlug(s.slug)
                     } else {
                       const realIdx = domain.subs.findIndex(subItem => subItem.slug === s.slug)
                       setSubIdx(realIdx)
                       setHasHoverLeftActiveSub(false)
+                      setJustDeselectedSlug(null)
                     }
                   }}
                   onMouseLeave={() => {
                     if (isSelected) {
                       setHasHoverLeftActiveSub(true)
+                    }
+                    if (isJustDeselected) {
+                      setJustDeselectedSlug(null)
                     }
                   }}
                 >
