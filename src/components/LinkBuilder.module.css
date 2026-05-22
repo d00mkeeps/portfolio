@@ -21,14 +21,14 @@
   align-items: center;
   gap: 0;
   font-family: var(--font-mono);
-  font-size: 1.5rem; /* Scaled up */
+  font-size: 1.75rem; /* Scaled up */
   user-select: none;
 }
 
 .dot {
-  padding: 0 0.15rem;
+  padding: 0 0.18rem;
   color: var(--text-muted);
-  font-size: 1.7rem;
+  font-size: 1.95rem;
   display: flex;
   align-items: center;
   height: 64px; /* Scaled up */
@@ -52,18 +52,34 @@
   transition: none !important;
 }
 
-/* Subdomains inline list */
 .subdomainsList {
   display: inline-flex;
   align-items: center;
   color: var(--text-muted);
-  font-size: 1.4rem;
+  font-size: 1.65rem;
 }
 
-.bracket {
-  color: var(--text-dim);
-  opacity: 0.3;
-  padding: 0 0.25rem;
+.inactiveGroup {
+  display: inline-flex;
+  align-items: center;
+}
+
+.activeGroup {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 1.25rem;
+  animation: slideInSub 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes slideInSub {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .comma {
@@ -110,23 +126,24 @@
 
 /* domain prefix drum */
 .domainWrapper .drum:nth-of-type(1) {
-  width: var(--prefix-width, 220px);
+  width: var(--prefix-width, 192px);
   transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .domainWrapper .drum:nth-of-type(1) .drumItem {
   justify-content: flex-end;
-  padding-right: 0.15rem;
+  padding: 0;
 }
 
 /* suffix drum */
 .domainWrapper .drum:nth-of-type(2) {
-  width: 90px; /* Scaled up width */
+  width: var(--suffix-width, 48px);
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .domainWrapper .drum:nth-of-type(2) .drumItem {
   justify-content: flex-start;
-  padding-left: 0.15rem;
+  padding: 0;
 }
 
 .domainWrapper .dot {
@@ -164,10 +181,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem; /* Scaled up */
+  font-size: 1.65rem; /* Scaled up */
   color: var(--text-muted);
   opacity: 0.45;
-  padding: 0 0.5rem;
+  padding: 0;
   transition: color 0.2s, opacity 0.2s;
   white-space: nowrap;
   cursor: pointer;
@@ -318,24 +335,24 @@
 /* ─── Mobile ─────────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .urlBar {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     gap: 0;
   }
 
   .dot {
-    font-size: 1.3rem;
+    font-size: 1.45rem;
   }
 
   .drumItem {
-    font-size: 1.05rem;
+    font-size: 1.25rem;
   }
 
   .subdomainsList {
-    font-size: 1.05rem;
+    font-size: 1.25rem;
   }
 
-  .domainWrapper .drum:nth-of-type(1) { width: var(--prefix-width-mobile, 160px); }
-  .domainWrapper .drum:nth-of-type(2) { width: 70px; }
+  .domainWrapper .drum:nth-of-type(1) { width: var(--prefix-width-mobile, 144px); }
+  .domainWrapper .drum:nth-of-type(2) { width: var(--suffix-width-mobile, 36px); }
 
   .infoPanel {
     max-width: 100%;

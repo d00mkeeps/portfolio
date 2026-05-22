@@ -234,48 +234,48 @@ export default function LinkBuilder() {
       {/* ── URL bar ── */}
       <div className={styles.urlBar}>
         <div className={styles.subdomainsList}>
-          {domain.subs.filter(s => s.slug !== '').map((s, idx) => {
-            const isSelected = sub.slug === s.slug
-            const isJustDeselected = justDeselectedSlug === s.slug
-
-            let optionClass = ''
-            if (isSelected) {
-              optionClass = `${styles.subOptActive} ${hasHoverLeftActiveSub ? styles.subOptActiveHoverDim : ''}`
-            } else if (isJustDeselected) {
-              optionClass = styles.subOptJustDeselected
-            }
-
-            return (
-              <React.Fragment key={s.slug}>
-                {idx > 0 && <span className={styles.comma}>,</span>}
-                <span
-                  className={`${styles.subOpt} ${optionClass}`}
-                  onClick={() => {
-                    if (isSelected) {
-                      setSubIdx(0)
-                      setHasHoverLeftActiveSub(true)
-                      setJustDeselectedSlug(s.slug)
-                    } else {
+          {/* Left part: inactive options */}
+          <div className={styles.inactiveGroup}>
+            {domain.subs.filter(s => s.slug !== '' && s.slug !== sub.slug).map((s, idx) => {
+              const isJustDeselected = justDeselectedSlug === s.slug
+              const optionClass = isJustDeselected ? styles.subOptJustDeselected : ''
+              return (
+                <React.Fragment key={s.slug}>
+                  {idx > 0 && <span className={styles.comma}>,</span>}
+                  <span
+                    className={`${styles.subOpt} ${optionClass}`}
+                    onClick={() => {
                       const realIdx = domain.subs.findIndex(subItem => subItem.slug === s.slug)
                       setSubIdx(realIdx)
                       setHasHoverLeftActiveSub(false)
                       setJustDeselectedSlug(null)
-                    }
-                  }}
-                  onMouseLeave={() => {
-                    if (isSelected) {
-                      setHasHoverLeftActiveSub(true)
-                    }
-                    if (isJustDeselected) {
-                      setJustDeselectedSlug(null)
-                    }
-                  }}
-                >
-                  {s.slug}
-                </span>
-              </React.Fragment>
-            )
-          })}
+                    }}
+                  >
+                    {s.slug}
+                  </span>
+                </React.Fragment>
+              )
+            })}
+          </div>
+
+          {/* Active subdomain sliding directly next to the dot */}
+          {sub.slug !== '' && (
+            <div className={styles.activeGroup}>
+              <span
+                className={`${styles.subOpt} ${styles.subOptActive} ${hasHoverLeftActiveSub ? styles.subOptActiveHoverDim : ''}`}
+                onClick={() => {
+                  setSubIdx(0)
+                  setHasHoverLeftActiveSub(true)
+                  setJustDeselectedSlug(sub.slug)
+                }}
+                onMouseLeave={() => {
+                  setHasHoverLeftActiveSub(true)
+                }}
+              >
+                {sub.slug}
+              </span>
+            </div>
+          )}
         </div>
 
         <span className={styles.dot}>.</span>
@@ -283,8 +283,10 @@ export default function LinkBuilder() {
         <div
           className={styles.domainWrapper}
           style={{
-            '--prefix-width': domIdx === 0 ? '190px' : '65px',
-            '--prefix-width-mobile': domIdx === 0 ? '145px' : '50px'
+            '--prefix-width': domIdx === 0 ? '192px' : '64px',
+            '--suffix-width': domIdx === 0 ? '48px' : '32px',
+            '--prefix-width-mobile': domIdx === 0 ? '144px' : '48px',
+            '--suffix-width-mobile': domIdx === 0 ? '36px' : '24px'
           }}
         >
           <Drum
