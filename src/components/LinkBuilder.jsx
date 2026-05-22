@@ -97,7 +97,7 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
       <div className={styles.drumFadeTop} />
       <div
         className={styles.drumTrack}
-        style={{ transform: `translateY(${-activeIdx * ITEM_H}px)` }}
+        style={{ transform: `translateY(${(1 - activeIdx) * ITEM_H}px)` }}
       >
         {items.map((item, i) => (
           <div
