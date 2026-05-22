@@ -23,7 +23,6 @@
   font-family: var(--font-mono);
   font-size: 1.5rem; /* Scaled up */
   user-select: none;
-  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.08));
 }
 
 .dot {
