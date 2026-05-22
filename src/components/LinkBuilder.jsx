@@ -8,6 +8,17 @@ const DOMAINS = [
     label: 'mileshillary.com',
     subs: [
       {
+        slug: '',
+        name: 'Miles Hillary',
+        initials: 'MH',
+        tagline: 'Personal portfolio and shipped iOS products.',
+        copy: 'NHS patient non-adherence, financial models stress-testing, and cognitive trajectory visualisers. Select a subdomain or case study to explore.',
+        stack: ['Vite', 'Three.js', 'React', 'CSS Modules'],
+        status: 'online',
+        caseStudy: '/#work',
+        live: 'https://mileshillary.com',
+      },
+      {
         slug: 'clearbox',
         name: 'Clear Box',
         initials: 'CB',
@@ -23,6 +34,17 @@ const DOMAINS = [
   {
     label: 'volc.uk',
     subs: [
+      {
+        slug: '',
+        name: 'Volc',
+        initials: 'VO',
+        tagline: 'Software collective and research systems.',
+        copy: 'Building tooling and engines for AI reasoning evaluation, financial model stress-testing, and automated transfer pricing.',
+        stack: ['Python', 'React', 'FastAPI', 'Docker'],
+        status: 'online',
+        caseStudy: '/#work',
+        live: 'https://volc.uk',
+      },
       {
         slug: 'brain',
         name: 'Grey Plain',
@@ -64,35 +86,51 @@ const DOMAINS = [
 // (/components/LinkBuilder.Drum)
 function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem }) {
   const ITEM_H = 52
-  const touchStartY = useRef(null)
-  const lastDelta = useRef(0)
+  const dragStartY = useRef(null)
+  const lastStep = useRef(0)
+  const [isDragging, setIsDragging] = useState(false)
+  const hasMoved = useRef(false)
 
   const handleWheel = useCallback(e => {
     e.preventDefault()
     onCycle(e.deltaY > 0 ? 1 : -1)
   }, [onCycle])
 
-  const handleTouchStart = e => {
-    touchStartY.current = e.touches[0].clientY
-    lastDelta.current = 0
+  const handlePointerDown = e => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return
+    dragStartY.current = e.clientY
+    lastStep.current = 0
+    setIsDragging(true)
+    hasMoved.current = false
+    e.currentTarget.setPointerCapture(e.pointerId)
   }
 
-  const handleTouchMove = e => {
-    e.preventDefault()
-    const delta = touchStartY.current - e.touches[0].clientY
-    const step = Math.round(delta / ITEM_H)
-    if (step !== lastDelta.current) {
-      onCycle(step - lastDelta.current)
-      lastDelta.current = step
+  const handlePointerMove = e => {
+    if (!isDragging) return
+    const deltaY = dragStartY.current - e.clientY
+    const step = Math.round(deltaY / ITEM_H)
+    if (step !== lastStep.current) {
+      onCycle(step - lastStep.current)
+      lastStep.current = step
+      hasMoved.current = true
+    }
+  }
+
+  const handlePointerUp = e => {
+    if (isDragging) {
+      setIsDragging(false)
+      e.currentTarget.releasePointerCapture(e.pointerId)
     }
   }
 
   return (
     <div
-      className={styles.drum}
+      className={`${styles.drum} ${isDragging ? styles.drumDragging : ''}`}
       onWheel={handleWheel}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
     >
       <div className={styles.drumFadeTop} />
       <div
@@ -104,7 +142,7 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
             key={itemKey(item)}
             className={`${styles.drumItem} ${i === activeIdx ? styles.drumItemActive : ''}`}
             onClick={() => {
-              if (i !== activeIdx) {
+              if (!hasMoved.current && i !== activeIdx) {
                 onCycle(i - activeIdx)
               }
             }}
@@ -154,7 +192,7 @@ export default function LinkBuilder() {
       <p className={styles.label}>live projects</p>
 
       {/* ── URL bar ── */}
-      <div className={styles.urlBar}>
+      <div className={`${styles.urlBar} ${sub.slug === '' ? styles.urlBarCollapsed : ''}`}>
         <Drum
           items={domain.subs}
           activeIdx={subIdx}
@@ -162,7 +200,7 @@ export default function LinkBuilder() {
           itemKey={s => s.slug}
         />
 
-        <span className={styles.dot}>.</span>
+        <span className={`${styles.dot} ${sub.slug === '' ? styles.dotHidden : ''}`}>.</span>
 
         <div className={styles.domainWrapper}>
           <Drum

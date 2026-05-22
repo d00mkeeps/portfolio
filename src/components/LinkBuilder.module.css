@@ -19,20 +19,30 @@
 .urlBar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0;
   font-family: var(--font-mono);
   font-size: 0.88rem;
   user-select: none;
 }
 
 .dot {
-  padding: 0 0.1rem;
+  padding: 0 0.15rem;
   color: var(--text-muted);
   font-size: 1rem;
   display: flex;
   align-items: center;
   height: 52px;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.15), 0 0 2px rgba(255, 255, 255, 0.1);
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease, padding 0.3s ease;
+  width: auto;
+}
+
+.dotHidden {
+  width: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 /* ─── Drum ───────────────────────────────────────────────────────────────────── */
@@ -40,12 +50,29 @@
   position: relative;
   overflow: hidden;
   height: 156px; /* 3 slots visible (3 * 52px) */
-  cursor: ns-resize;
+  cursor: grab;
+  user-select: none;
+}
+
+.drumDragging {
+  cursor: grabbing !important;
 }
 
 /* subdomain drum */
 .urlBar > .drum {
   width: 90px;
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+}
+
+.urlBar > .drum .drumItem {
+  justify-content: flex-end;
+  padding-right: 0.15rem;
+}
+
+.urlBarCollapsed > .drum:nth-of-type(1) {
+  width: 0px !important;
+  opacity: 0 !important;
+  pointer-events: none;
 }
 
 .domainWrapper {
@@ -263,7 +290,7 @@
 @media (max-width: 600px) {
   .urlBar {
     font-size: 0.78rem;
-    gap: 0.3rem;
+    gap: 0;
   }
 
   .urlBar > .drum { width: 76px; }
