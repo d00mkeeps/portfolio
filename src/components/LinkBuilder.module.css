@@ -63,19 +63,19 @@
   position: absolute;
   left: 0;
   right: 0;
-  height: 52px; /* Covers exactly one slot height */
+  height: 20px; /* Reduced so it only softens absolute boundaries */
   z-index: 2;
   pointer-events: none;
 }
 
 .drumFadeTop {
   top: 0;
-  background: linear-gradient(to bottom, var(--bg) 15%, transparent);
+  background: linear-gradient(to bottom, var(--bg), transparent);
 }
 
 .drumFadeBottom {
   bottom: 0;
-  background: linear-gradient(to top, var(--bg) 15%, transparent);
+  background: linear-gradient(to top, var(--bg), transparent);
 }
 
 .drumTrack {
@@ -91,16 +91,18 @@
   justify-content: center;
   font-size: 0.82rem;
   color: var(--text-muted);
-  opacity: 0.25; /* Faint unselected item */
+  opacity: 0.45; /* Increased visibility */
   padding: 0 0.5rem;
   transition: color 0.2s, opacity 0.2s;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .drumItemActive {
   color: var(--text);
-  opacity: 1; /* Fully visible */
+  opacity: 1;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.2), 0 0 2px rgba(255, 255, 255, 0.15);
+  cursor: default;
 }
 
 /* ─── Info panel ─────────────────────────────────────────────────────────────── */

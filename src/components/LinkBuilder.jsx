@@ -103,6 +103,11 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
           <div
             key={itemKey(item)}
             className={`${styles.drumItem} ${i === activeIdx ? styles.drumItemActive : ''}`}
+            onClick={() => {
+              if (i !== activeIdx) {
+                onCycle(i - activeIdx)
+              }
+            }}
           >
             {renderItem ? renderItem(item) : (typeof item === 'string' ? item : item.slug)}
           </div>
