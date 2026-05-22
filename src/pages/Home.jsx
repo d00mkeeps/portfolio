@@ -4,6 +4,7 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav.jsx'
 import Footer from '../components/Footer.jsx'
+import LinkBuilder from '../components/LinkBuilder.jsx'
 import styles from './Home.module.css'
 
 function ClearBoxCube() {
@@ -213,6 +214,8 @@ export default function Home() {
               book a call →
             </a>
           </section>
+
+          <LinkBuilder />
 
           {/* ── Projects ── */}
           <section id="work" className={styles.projects}>

@@ -1,0 +1,286 @@
+/* ─── Root ───────────────────────────────────────────────────────────────────── */
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 5rem 0 4rem;
+}
+
+.label {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.75rem;
+}
+
+/* ─── URL bar ────────────────────────────────────────────────────────────────── */
+.urlBar {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 3px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  user-select: none;
+}
+
+.scheme {
+  padding: 0 0.85rem 0 1.1rem;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  border-right: 1px solid var(--border);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.dot {
+  padding: 0 0.2rem;
+  color: var(--text-muted);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  height: 52px;
+  /* no border — visually floats between drums */
+}
+
+/* ─── Drum ───────────────────────────────────────────────────────────────────── */
+.drum {
+  position: relative;
+  overflow: hidden;
+  height: 52px;
+  cursor: ns-resize;
+  /* first drum = subdomain, second = domain — widths set inline via modifier */
+}
+
+/* subdomain drum */
+.urlBar .drum:first-of-type {
+  width: 90px;
+  border-right: 1px solid var(--border);
+}
+
+/* domain drum */
+.urlBar .drum:last-of-type {
+  width: 170px;
+  border-left: 1px solid var(--border);
+}
+
+.drumFadeTop,
+.drumFadeBottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 14px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.drumFadeTop {
+  top: 0;
+  background: linear-gradient(to bottom, var(--surface), transparent);
+}
+
+.drumFadeBottom {
+  bottom: 0;
+  background: linear-gradient(to top, var(--surface), transparent);
+}
+
+.drumTrack {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.drumItem {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 0 1rem;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.drumItemActive {
+  color: var(--text);
+}
+
+/* ─── Visit button ───────────────────────────────────────────────────────────── */
+.visitBtn {
+  padding: 0 1.25rem;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  background: var(--accent);
+  color: #0a0a0a;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  border-left: 1px solid rgba(248, 79, 62, 0.4);
+  transition: opacity 0.2s;
+  text-decoration: none;
+}
+
+.visitBtn:hover { opacity: 0.85; }
+
+.visitBtnDisabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ─── Info panel ─────────────────────────────────────────────────────────────── */
+.infoPanel {
+  width: 100%;
+  max-width: 580px;
+  margin-top: 2.5rem;
+  animation: fadeUp 0.35s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.infoHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+/* ─── Logo square (mirrors Nav.jsx .logoSquare) ──────────────────────────────── */
+.logoSquare {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(-45deg, var(--accent), #6e6e6e, var(--accent), #5f5f5f);
+  background-size: 400% 400%;
+  animation: logoShimmer 12s ease infinite;
+  box-shadow: 0 0 12px rgba(248, 79, 62, 0.45);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgba(8, 8, 8, 0.9);
+  flex-shrink: 0;
+}
+
+.logoSquareSmall {
+  width: 30px;
+  height: 30px;
+  font-size: 0.65rem;
+  box-shadow: 0 0 8px rgba(248, 79, 62, 0.3);
+}
+
+@keyframes logoShimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.infoName {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.infoStatus {
+  margin-left: auto;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.45rem;
+  border-radius: 2px;
+  border: 1px solid var(--accent-mid);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.infoTagline {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: var(--font-serif);
+  margin-bottom: 0.65rem;
+  line-height: 1.6;
+}
+
+.infoCopy {
+  font-size: 0.8rem;
+  color: #a8a5a0;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.infoStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.infoTag {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 0.12rem 0.4rem;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+}
+
+.infoActions {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.caseStudyLink {
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s;
+  text-decoration: none;
+}
+
+.caseStudyLink:hover { opacity: 0.7; }
+
+.liveLink {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.liveLink:hover { color: var(--text); }
+
+/* ─── Mobile ─────────────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .urlBar {
+    font-size: 0.78rem;
+  }
+
+  .urlBar .drum:first-of-type { width: 76px; }
+  .urlBar .drum:last-of-type  { width: 140px; }
+
+  .scheme { padding: 0 0.6rem 0 0.75rem; font-size: 0.72rem; }
+  .visitBtn { padding: 0 0.9rem; font-size: 0.7rem; }
+
+  .infoPanel { max-width: 100%; padding: 0 var(--gutter); }
+}
