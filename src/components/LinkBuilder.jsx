@@ -213,6 +213,16 @@ export default function LinkBuilder() {
   const domain = DOMAINS[domIdx]
   const sub = domain.subs[subIdx]
 
+  const updateSubIdx = useCallback(idx => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setSubIdx(idx)
+      })
+    } else {
+      setSubIdx(idx)
+    }
+  }, [])
+
   const cycleDom = useCallback(dir => {
     setDomIdx(i => {
       const next = (i + dir + DOMAINS.length) % DOMAINS.length
@@ -233,80 +243,88 @@ export default function LinkBuilder() {
 
       {/* ── URL bar ── */}
       <div className={styles.urlBar}>
-        <div className={styles.subdomainsList}>
-          {/* Left part: inactive options */}
-          <div className={styles.inactiveGroup}>
-            {domain.subs.filter(s => s.slug !== '' && s.slug !== sub.slug).map((s, idx) => {
-              const isJustDeselected = justDeselectedSlug === s.slug
-              const optionClass = isJustDeselected ? styles.subOptJustDeselected : ''
-              return (
-                <React.Fragment key={s.slug}>
-                  {idx > 0 && <span className={styles.comma}>,</span>}
-                  <span
-                    className={`${styles.subOpt} ${optionClass}`}
-                    onClick={() => {
-                      const realIdx = domain.subs.findIndex(subItem => subItem.slug === s.slug)
-                      setSubIdx(realIdx)
-                      setHasHoverLeftActiveSub(false)
-                      setJustDeselectedSlug(null)
-                    }}
-                  >
-                    {s.slug}
-                  </span>
-                </React.Fragment>
-              )
-            })}
+        <div className={styles.gridLeft}>
+          <div className={styles.subdomainsList}>
+            {/* Left part: inactive options */}
+            <div className={styles.inactiveGroup}>
+              {domain.subs.filter(s => s.slug !== '' && s.slug !== sub.slug).map((s, idx) => {
+                const isJustDeselected = justDeselectedSlug === s.slug
+                const optionClass = isJustDeselected ? styles.subOptJustDeselected : ''
+                return (
+                  <React.Fragment key={s.slug}>
+                    {idx > 0 && <span className={styles.comma}>,</span>}
+                    <span
+                      className={`${styles.subOpt} ${optionClass}`}
+                      style={{ viewTransitionName: `sub-opt-${s.slug}` }}
+                      onClick={() => {
+                        const realIdx = domain.subs.findIndex(subItem => subItem.slug === s.slug)
+                        updateSubIdx(realIdx)
+                        setHasHoverLeftActiveSub(false)
+                        setJustDeselectedSlug(null)
+                      }}
+                    >
+                      {s.slug}
+                    </span>
+                  </React.Fragment>
+                )
+              })}
+            </div>
+
+            {/* Active subdomain sliding directly next to the dot */}
+            {sub.slug !== '' && (
+              <div className={styles.activeGroup}>
+                <span
+                  className={`${styles.subOpt} ${styles.subOptActive} ${hasHoverLeftActiveSub ? styles.subOptActiveHoverDim : ''}`}
+                  style={{ viewTransitionName: `sub-opt-${sub.slug}` }}
+                  onClick={() => {
+                    updateSubIdx(0)
+                    setHasHoverLeftActiveSub(true)
+                    setJustDeselectedSlug(sub.slug)
+                  }}
+                  onMouseLeave={() => {
+                    setHasHoverLeftActiveSub(true)
+                  }}
+                >
+                  {sub.slug}
+                </span>
+              </div>
+            )}
           </div>
 
-          {/* Active subdomain sliding directly next to the dot */}
-          {sub.slug !== '' && (
-            <div className={styles.activeGroup}>
-              <span
-                className={`${styles.subOpt} ${styles.subOptActive} ${hasHoverLeftActiveSub ? styles.subOptActiveHoverDim : ''}`}
-                onClick={() => {
-                  setSubIdx(0)
-                  setHasHoverLeftActiveSub(true)
-                  setJustDeselectedSlug(sub.slug)
-                }}
-                onMouseLeave={() => {
-                  setHasHoverLeftActiveSub(true)
-                }}
-              >
-                {sub.slug}
-              </span>
-            </div>
-          )}
-        </div>
-
-        <span className={styles.dot}>.</span>
-
-        <div
-          className={styles.domainWrapper}
-          style={{
-            '--prefix-width': domIdx === 0 ? '192px' : '64px',
-            '--suffix-width': domIdx === 0 ? '48px' : '32px',
-            '--prefix-width-mobile': domIdx === 0 ? '144px' : '48px',
-            '--suffix-width-mobile': domIdx === 0 ? '36px' : '24px'
-          }}
-        >
-          <Drum
-            items={DOMAINS}
-            activeIdx={domIdx}
-            onCycle={cycleDom}
-            itemKey={d => d.label}
-            renderItem={d => d.label.split('.')[0]}
-          />
-
           <span className={styles.dot}>.</span>
-
-          <Drum
-            items={DOMAINS}
-            activeIdx={domIdx}
-            onCycle={cycleDom}
-            itemKey={d => d.label + '-suffix'}
-            renderItem={d => d.label.split('.')[1]}
-          />
         </div>
+
+        <div className={styles.gridCenter}>
+          <div
+            className={styles.domainWrapper}
+            style={{
+              '--prefix-width': domIdx === 0 ? '192px' : '64px',
+              '--suffix-width': domIdx === 0 ? '48px' : '32px',
+              '--prefix-width-mobile': domIdx === 0 ? '144px' : '48px',
+              '--suffix-width-mobile': domIdx === 0 ? '36px' : '24px'
+            }}
+          >
+            <Drum
+              items={DOMAINS}
+              activeIdx={domIdx}
+              onCycle={cycleDom}
+              itemKey={d => d.label}
+              renderItem={d => d.label.split('.')[0]}
+            />
+
+            <span className={styles.dot}>.</span>
+
+            <Drum
+              items={DOMAINS}
+              activeIdx={domIdx}
+              onCycle={cycleDom}
+              itemKey={d => d.label + '-suffix'}
+              renderItem={d => d.label.split('.')[1]}
+            />
+          </div>
+        </div>
+
+        <div className={styles.gridRight} />
       </div>
 
       {/* ── Project info ── */}
