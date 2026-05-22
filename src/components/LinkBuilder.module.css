@@ -48,14 +48,42 @@
   cursor: grabbing !important;
 }
 
-/* subdomain drum */
-.urlBar > .drum {
-  width: 160px; /* Scaled up width */
+/* Subdomains inline list */
+.subdomainsList {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 1.4rem;
 }
 
-.urlBar > .drum .drumItem {
-  justify-content: flex-end;
-  padding-right: 0.15rem;
+.bracket {
+  color: var(--text-dim);
+  opacity: 0.3;
+  padding: 0 0.25rem;
+}
+
+.comma {
+  color: var(--text-dim);
+  opacity: 0.3;
+  padding-right: 0.35rem;
+}
+
+.subOpt {
+  cursor: pointer;
+  opacity: 0.45;
+  transition: color 0.2s, opacity 0.2s, text-shadow 0.2s;
+  padding: 0 0.1rem;
+}
+
+.subOpt:hover {
+  opacity: 0.75;
+  color: var(--text);
+}
+
+.subOptActive {
+  color: var(--text);
+  opacity: 1;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 5px rgba(255, 255, 255, 0.3), 0 0 2px rgba(255, 255, 255, 0.2);
 }
 
 .domainWrapper {
@@ -284,7 +312,10 @@
     font-size: 1.05rem;
   }
 
-  .urlBar > .drum { width: 120px; }
+  .subdomainsList {
+    font-size: 1.05rem;
+  }
+
   .domainWrapper .drum:nth-of-type(1) { width: 160px; }
   .domainWrapper .drum:nth-of-type(2) { width: 70px; }
 

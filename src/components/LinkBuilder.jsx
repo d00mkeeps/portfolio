@@ -193,12 +193,31 @@ export default function LinkBuilder() {
 
       {/* ── URL bar ── */}
       <div className={styles.urlBar}>
-        <Drum
-          items={domain.subs}
-          activeIdx={subIdx}
-          onCycle={cycleSub}
-          itemKey={s => s.slug}
-        />
+        <div className={styles.subdomainsList}>
+          <span className={styles.bracket}>[</span>
+          {domain.subs.filter(s => s.slug !== '').map((s, idx) => {
+            const isSelected = sub.slug === s.slug
+            return (
+              <React.Fragment key={s.slug}>
+                {idx > 0 && <span className={styles.comma}>,</span>}
+                <span
+                  className={`${styles.subOpt} ${isSelected ? styles.subOptActive : ''}`}
+                  onClick={() => {
+                    if (isSelected) {
+                      setSubIdx(0)
+                    } else {
+                      const realIdx = domain.subs.findIndex(subItem => subItem.slug === s.slug)
+                      setSubIdx(realIdx)
+                    }
+                  }}
+                >
+                  {s.slug}
+                </span>
+              </React.Fragment>
+            )
+          })}
+          <span className={styles.bracket}>]</span>
+        </div>
 
         <span className={styles.dot}>.</span>
 
