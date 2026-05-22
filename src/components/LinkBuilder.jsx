@@ -87,8 +87,8 @@ const DOMAINS = [
 function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem }) {
   const ITEM_H = 64
   const dragStartY = useRef(null)
-  const lastStep = useRef(0)
   const [isDragging, setIsDragging] = useState(false)
+  const [dragOffset, setDragOffset] = useState(0)
   const hasMoved = useRef(false)
 
   const accumulator = useRef(0)
@@ -122,19 +122,17 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
   const handlePointerDown = e => {
     if (e.button !== 0 && e.pointerType === 'mouse') return
     dragStartY.current = e.clientY
-    lastStep.current = 0
     setIsDragging(true)
+    setDragOffset(0)
     hasMoved.current = false
     e.currentTarget.setPointerCapture(e.pointerId)
   }
 
   const handlePointerMove = e => {
     if (!isDragging) return
-    const deltaY = dragStartY.current - e.clientY
-    const step = Math.round(deltaY / ITEM_H)
-    if (step !== lastStep.current) {
-      onCycle(step - lastStep.current)
-      lastStep.current = step
+    const deltaY = e.clientY - dragStartY.current
+    setDragOffset(deltaY)
+    if (Math.abs(deltaY) > 5) {
       hasMoved.current = true
     }
   }
@@ -143,6 +141,21 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
     if (isDragging) {
       setIsDragging(false)
       e.currentTarget.releasePointerCapture(e.pointerId)
+
+      let steps = 0
+      const threshold = 20 // More sensitive (20px) threshold to trigger switch
+      if (Math.abs(dragOffset) >= threshold) {
+        if (Math.abs(dragOffset) <= ITEM_H) {
+          steps = dragOffset > 0 ? -1 : 1
+        } else {
+          steps = -Math.round(dragOffset / ITEM_H)
+        }
+      }
+
+      if (steps !== 0) {
+        onCycle(steps)
+      }
+      setDragOffset(0)
     }
   }
 
@@ -158,7 +171,7 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
       <div className={styles.drumFadeTop} />
       <div
         className={styles.drumTrack}
-        style={{ transform: `translateY(${(1 - activeIdx) * ITEM_H}px)` }}
+        style={{ transform: `translateY(${(1 - activeIdx) * ITEM_H + dragOffset}px)` }}
       >
         {items.map((item, i) => (
           <div
