@@ -84,7 +84,12 @@
   color: var(--text);
 }
 
-.subOptActive,
+.subOptActive {
+  color: var(--text);
+  opacity: 0.75;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3), 0 0 2px rgba(255, 255, 255, 0.15);
+}
+
 .subOptActive:hover {
   color: var(--text) !important;
   opacity: 1 !important;
