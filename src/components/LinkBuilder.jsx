@@ -85,7 +85,7 @@ const DOMAINS = [
 // ─── Drum ─────────────────────────────────────────────────────────────────────
 // (/components/LinkBuilder.Drum)
 function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem }) {
-  const ITEM_H = 52
+  const ITEM_H = 64
   const dragStartY = useRef(null)
   const lastStep = useRef(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -147,7 +147,7 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
               }
             }}
           >
-            {renderItem ? renderItem(item) : (typeof item === 'string' ? item : item.slug)}
+            {renderItem ? renderItem(item) : (item.slug === '' ? '—' : item.slug)}
           </div>
         ))}
       </div>
@@ -192,7 +192,7 @@ export default function LinkBuilder() {
       <p className={styles.label}>live projects</p>
 
       {/* ── URL bar ── */}
-      <div className={`${styles.urlBar} ${sub.slug === '' ? styles.urlBarCollapsed : ''}`}>
+      <div className={styles.urlBar}>
         <Drum
           items={domain.subs}
           activeIdx={subIdx}
@@ -200,7 +200,7 @@ export default function LinkBuilder() {
           itemKey={s => s.slug}
         />
 
-        <span className={`${styles.dot} ${sub.slug === '' ? styles.dotHidden : ''}`}>.</span>
+        <span className={styles.dot}>.</span>
 
         <div className={styles.domainWrapper}>
           <Drum
