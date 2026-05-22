@@ -91,15 +91,32 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
   const [isDragging, setIsDragging] = useState(false)
   const hasMoved = useRef(false)
 
-  const lastWheelTime = useRef(0)
+  const accumulator = useRef(0)
+  const lastEventTime = useRef(0)
+  const wheelTimeout = useRef(null)
 
   const handleWheel = useCallback(e => {
     e.preventDefault()
+    if (wheelTimeout.current) clearTimeout(wheelTimeout.current)
+
+    wheelTimeout.current = setTimeout(() => {
+      accumulator.current = 0
+    }, 150)
+
     const now = Date.now()
-    if (now - lastWheelTime.current < 200) return
-    if (Math.abs(e.deltaY) < 4) return
-    onCycle(e.deltaY > 0 ? 1 : -1)
-    lastWheelTime.current = now
+    accumulator.current += e.deltaY
+
+    const THRESHOLD = 35
+    const COOLDOWN = 200
+
+    if (Math.abs(accumulator.current) >= THRESHOLD) {
+      if (now - lastEventTime.current >= COOLDOWN) {
+        const direction = accumulator.current > 0 ? 1 : -1
+        onCycle(direction)
+        lastEventTime.current = now
+        accumulator.current = 0
+      }
+    }
   }, [onCycle])
 
   const handlePointerDown = e => {
