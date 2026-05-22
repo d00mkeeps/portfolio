@@ -234,7 +234,6 @@ export default function LinkBuilder() {
       {/* ── URL bar ── */}
       <div className={styles.urlBar}>
         <div className={styles.subdomainsList}>
-          <span className={styles.bracket}>[</span>
           {domain.subs.filter(s => s.slug !== '').map((s, idx) => {
             const isSelected = sub.slug === s.slug
             const isJustDeselected = justDeselectedSlug === s.slug
@@ -277,7 +276,6 @@ export default function LinkBuilder() {
               </React.Fragment>
             )
           })}
-          <span className={styles.bracket}>]</span>
         </div>
 
         <span className={styles.dot}>.</span>
@@ -285,8 +283,8 @@ export default function LinkBuilder() {
         <div
           className={styles.domainWrapper}
           style={{
-            '--prefix-width': domIdx === 0 ? '165px' : '60px',
-            '--prefix-width-mobile': domIdx === 0 ? '125px' : '45px'
+            '--prefix-width': domIdx === 0 ? '190px' : '65px',
+            '--prefix-width-mobile': domIdx === 0 ? '145px' : '50px'
           }}
         >
           <Drum

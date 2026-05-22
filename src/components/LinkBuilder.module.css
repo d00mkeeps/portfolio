@@ -69,14 +69,14 @@
 .comma {
   color: var(--text-dim);
   opacity: 0.3;
-  padding-right: 0.35rem;
+  padding: 0 0.2rem 0 0.05rem;
 }
 
 .subOpt {
   cursor: pointer;
   opacity: 0.45;
   transition: color 0.2s, opacity 0.2s, text-shadow 0.2s;
-  padding: 0 0.1rem;
+  padding: 0 0.05rem;
 }
 
 .subOpt:hover {
@@ -186,6 +186,7 @@
   max-width: 680px; /* Scaled up */
   margin-top: 3.5rem;
   animation: fadeUp 0.35s ease both;
+  min-height: 250px; /* Prevent layout shift when switching */
 }
 
 @keyframes fadeUp {
@@ -336,7 +337,11 @@
   .domainWrapper .drum:nth-of-type(1) { width: var(--prefix-width-mobile, 160px); }
   .domainWrapper .drum:nth-of-type(2) { width: 70px; }
 
-  .infoPanel { max-width: 100%; padding: 0 var(--gutter); }
+  .infoPanel {
+    max-width: 100%;
+    padding: 0 var(--gutter);
+    min-height: 320px; /* Prevent mobile layout shift */
+  }
 
   .infoName { font-size: 1.3rem; }
   .infoTagline { font-size: 0.95rem; }
