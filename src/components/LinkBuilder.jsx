@@ -91,9 +91,15 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
   const [isDragging, setIsDragging] = useState(false)
   const hasMoved = useRef(false)
 
+  const lastWheelTime = useRef(0)
+
   const handleWheel = useCallback(e => {
     e.preventDefault()
+    const now = Date.now()
+    if (now - lastWheelTime.current < 200) return
+    if (Math.abs(e.deltaY) < 4) return
     onCycle(e.deltaY > 0 ? 1 : -1)
+    lastWheelTime.current = now
   }, [onCycle])
 
   const handlePointerDown = e => {
@@ -221,7 +227,13 @@ export default function LinkBuilder() {
 
         <span className={styles.dot}>.</span>
 
-        <div className={styles.domainWrapper}>
+        <div
+          className={styles.domainWrapper}
+          style={{
+            '--prefix-width': domIdx === 0 ? '165px' : '60px',
+            '--prefix-width-mobile': domIdx === 0 ? '125px' : '45px'
+          }}
+        >
           <Drum
             items={DOMAINS}
             activeIdx={domIdx}
