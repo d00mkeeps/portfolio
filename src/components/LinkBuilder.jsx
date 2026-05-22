@@ -62,7 +62,7 @@ const DOMAINS = [
 
 // ─── Drum ─────────────────────────────────────────────────────────────────────
 // (/components/LinkBuilder.Drum)
-function Drum({ items, activeIdx, onCycle, itemKey = item => item }) {
+function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem }) {
   const ITEM_H = 52
   const touchStartY = useRef(null)
   const lastDelta = useRef(0)
@@ -104,7 +104,7 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item }) {
             key={itemKey(item)}
             className={`${styles.drumItem} ${i === activeIdx ? styles.drumItemActive : ''}`}
           >
-            {typeof item === 'string' ? item : item.slug}
+            {renderItem ? renderItem(item) : (typeof item === 'string' ? item : item.slug)}
           </div>
         ))}
       </div>
@@ -150,8 +150,6 @@ export default function LinkBuilder() {
 
       {/* ── URL bar ── */}
       <div className={styles.urlBar}>
-        <span className={styles.scheme}>https://</span>
-
         <Drum
           items={domain.subs}
           activeIdx={subIdx}
@@ -162,21 +160,22 @@ export default function LinkBuilder() {
         <span className={styles.dot}>.</span>
 
         <Drum
-          items={DOMAINS.map(d => d.label)}
+          items={DOMAINS}
           activeIdx={domIdx}
           onCycle={cycleDom}
-          itemKey={d => d}
+          itemKey={d => d.label}
+          renderItem={d => d.label.split('.')[0]}
         />
 
-        <a
-          href={sub.live ?? '#'}
-          target={sub.live ? '_blank' : undefined}
-          rel="noopener noreferrer"
-          className={`${styles.visitBtn} ${!sub.live ? styles.visitBtnDisabled : ''}`}
-          onClick={e => { if (!sub.live) e.preventDefault() }}
-        >
-          visit ↗
-        </a>
+        <span className={styles.dot}>.</span>
+
+        <Drum
+          items={DOMAINS}
+          activeIdx={domIdx}
+          onCycle={cycleDom}
+          itemKey={d => d.label + '-suffix'}
+          renderItem={d => d.label.split('.')[1]}
+        />
       </div>
 
       {/* ── Project info ── */}
