@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react'
+import { flushSync } from 'react-dom'
 import { Link } from 'react-router-dom'
 import styles from './LinkBuilder.module.css'
 
@@ -216,7 +217,9 @@ export default function LinkBuilder() {
   const updateSubIdx = useCallback(idx => {
     if (document.startViewTransition) {
       document.startViewTransition(() => {
-        setSubIdx(idx)
+        flushSync(() => {
+          setSubIdx(idx)
+        })
       })
     } else {
       setSubIdx(idx)
@@ -224,13 +227,23 @@ export default function LinkBuilder() {
   }, [])
 
   const cycleDom = useCallback(dir => {
-    setDomIdx(i => {
-      const next = (i + dir + DOMAINS.length) % DOMAINS.length
-      setSubIdx(0)
-      setHasHoverLeftActiveSub(true)
-      setJustDeselectedSlug(null)
-      return next
-    })
+    const update = () => {
+      setDomIdx(i => {
+        const next = (i + dir + DOMAINS.length) % DOMAINS.length
+        setSubIdx(0)
+        setHasHoverLeftActiveSub(true)
+        setJustDeselectedSlug(null)
+        return next
+      })
+    }
+
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        flushSync(update)
+      })
+    } else {
+      update()
+    }
   }, [])
 
   const cycleSub = useCallback(dir => {
