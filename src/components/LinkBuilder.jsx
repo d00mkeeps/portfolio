@@ -132,30 +132,37 @@ function Drum({ items, activeIdx, onCycle, itemKey = item => item, renderItem })
   const handlePointerMove = e => {
     if (!isDragging) return
     const deltaY = e.clientY - dragStartY.current
-    setDragOffset(deltaY)
+    let currentOffset = deltaY
+
     if (Math.abs(deltaY) > 5) {
       hasMoved.current = true
     }
+
+    const threshold = 32 // Switch when dragging halfway (32px) to the next slot
+    let steps = 0
+    if (deltaY > threshold) {
+      steps = -Math.floor((deltaY + threshold) / ITEM_H)
+    } else if (deltaY < -threshold) {
+      steps = Math.floor((-deltaY + threshold) / ITEM_H)
+    }
+
+    if (steps !== 0) {
+      const nextIdx = activeIdx + steps
+      // Clamp boundaries to prevent wrapping jumps during active dragging
+      if (nextIdx >= 0 && nextIdx < items.length) {
+        onCycle(steps)
+        dragStartY.current -= steps * ITEM_H
+        currentOffset = e.clientY - dragStartY.current
+      }
+    }
+
+    setDragOffset(currentOffset)
   }
 
   const handlePointerUp = e => {
     if (isDragging) {
       setIsDragging(false)
       e.currentTarget.releasePointerCapture(e.pointerId)
-
-      let steps = 0
-      const threshold = 20 // More sensitive (20px) threshold to trigger switch
-      if (Math.abs(dragOffset) >= threshold) {
-        if (Math.abs(dragOffset) <= ITEM_H) {
-          steps = dragOffset > 0 ? -1 : 1
-        } else {
-          steps = -Math.round(dragOffset / ITEM_H)
-        }
-      }
-
-      if (steps !== 0) {
-        onCycle(steps)
-      }
       setDragOffset(0)
     }
   }
