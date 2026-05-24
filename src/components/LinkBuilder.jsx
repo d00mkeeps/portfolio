@@ -207,34 +207,11 @@ function LogoSquare({ children, small }) {
 // (/components/LinkBuilder)
 export default function LinkBuilder() {
   const [domIdx, setDomIdx] = useState(0)
-  const [subIdx, setSubIdx] = useState(0)
-  const [hasHoverLeftActiveSub, setHasHoverLeftActiveSub] = useState(true)
-  const [justDeselectedSlug, setJustDeselectedSlug] = useState(null)
-
   const domain = DOMAINS[domIdx]
-  const sub = domain.subs[subIdx]
-
-  const updateSubIdx = useCallback(idx => {
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        flushSync(() => {
-          setSubIdx(idx)
-        })
-      })
-    } else {
-      setSubIdx(idx)
-    }
-  }, [])
 
   const cycleDom = useCallback(dir => {
     const update = () => {
-      setDomIdx(i => {
-        const next = (i + dir + DOMAINS.length) % DOMAINS.length
-        setSubIdx(0)
-        setHasHoverLeftActiveSub(true)
-        setJustDeselectedSlug(null)
-        return next
-      })
+      setDomIdx(i => (i + dir + DOMAINS.length) % DOMAINS.length)
     }
 
     if (document.startViewTransition) {
@@ -246,127 +223,66 @@ export default function LinkBuilder() {
     }
   }, [])
 
-  const cycleSub = useCallback(dir => {
-    setSubIdx(i => (i + dir + domain.subs.length) % domain.subs.length)
-  }, [domain.subs.length])
-
   return (
     <div className={styles.root}>
       <p className={styles.label}>live projects</p>
 
       {/* ── URL bar ── */}
       <div className={styles.urlBar}>
-        <div className={styles.gridLeft}>
-          <div className={styles.subdomainsList}>
-            {/* Left part: inactive options */}
-            <div className={styles.inactiveGroup}>
-              {domain.subs.filter(s => s.slug !== '' && s.slug !== sub.slug).map((s, idx) => {
-                const isJustDeselected = justDeselectedSlug === s.slug
-                const optionClass = isJustDeselected ? styles.subOptJustDeselected : ''
-                return (
-                  <React.Fragment key={s.slug}>
-                    {idx > 0 && <span className={styles.comma}>,</span>}
-                    <span
-                      className={`${styles.subOpt} ${optionClass}`}
-                      style={{ viewTransitionName: `sub-opt-${s.slug}` }}
-                      onClick={() => {
-                        const realIdx = domain.subs.findIndex(subItem => subItem.slug === s.slug)
-                        updateSubIdx(realIdx)
-                        setHasHoverLeftActiveSub(false)
-                        setJustDeselectedSlug(null)
-                      }}
-                    >
-                      {s.slug}
-                    </span>
-                  </React.Fragment>
-                )
-              })}
-            </div>
-
-            {/* Active subdomain sliding directly next to the dot */}
-            {sub.slug !== '' && (
-              <div className={styles.activeGroup}>
-                <span
-                  className={`${styles.subOpt} ${styles.subOptActive} ${hasHoverLeftActiveSub ? styles.subOptActiveHoverDim : ''}`}
-                  style={{ viewTransitionName: `sub-opt-${sub.slug}` }}
-                  onClick={() => {
-                    updateSubIdx(0)
-                    setHasHoverLeftActiveSub(true)
-                    setJustDeselectedSlug(sub.slug)
-                  }}
-                  onMouseLeave={() => {
-                    setHasHoverLeftActiveSub(true)
-                  }}
-                >
-                  {sub.slug}
-                </span>
-              </div>
-            )}
-          </div>
+        <div
+          className={styles.domainWrapper}
+          style={{
+            '--prefix-width': domIdx === 0 ? '220px' : '80px',
+            '--suffix-width': domIdx === 0 ? '60px' : '40px',
+            '--prefix-width-mobile': domIdx === 0 ? '165px' : '55px',
+            '--suffix-width-mobile': domIdx === 0 ? '42px' : '28px'
+          }}
+        >
+          <Drum
+            items={DOMAINS}
+            activeIdx={domIdx}
+            onCycle={cycleDom}
+            itemKey={d => d.label}
+            renderItem={d => d.label.split('.')[0]}
+          />
 
           <span className={styles.dot}>.</span>
+
+          <Drum
+            items={DOMAINS}
+            activeIdx={domIdx}
+            onCycle={cycleDom}
+            itemKey={d => d.label + '-suffix'}
+            renderItem={d => d.label.split('.')[1]}
+          />
         </div>
-
-        <div className={styles.gridCenter}>
-          <div
-            className={styles.domainWrapper}
-            style={{
-              '--prefix-width': domIdx === 0 ? '192px' : '64px',
-              '--suffix-width': domIdx === 0 ? '48px' : '32px',
-              '--prefix-width-mobile': domIdx === 0 ? '144px' : '48px',
-              '--suffix-width-mobile': domIdx === 0 ? '36px' : '24px'
-            }}
-          >
-            <Drum
-              items={DOMAINS}
-              activeIdx={domIdx}
-              onCycle={cycleDom}
-              itemKey={d => d.label}
-              renderItem={d => d.label.split('.')[0]}
-            />
-
-            <span className={styles.dot}>.</span>
-
-            <Drum
-              items={DOMAINS}
-              activeIdx={domIdx}
-              onCycle={cycleDom}
-              itemKey={d => d.label + '-suffix'}
-              renderItem={d => d.label.split('.')[1]}
-            />
-          </div>
-        </div>
-
-        <div className={styles.gridRight} />
       </div>
 
-      {/* ── Project info ── */}
-      <div className={styles.infoPanel} key={`${domIdx}-${subIdx}`}>
-        <hr className={styles.divider} />
-
-        <div className={styles.infoHeader}>
-          <LogoSquare small>{sub.initials}</LogoSquare>
-          <span className={styles.infoName}>{sub.name}</span>
-          <span className={styles.infoStatus}>{sub.status}</span>
-        </div>
-
-        <p className={styles.infoTagline}>{sub.tagline}</p>
-        <p className={styles.infoCopy}>{sub.copy}</p>
-
-        <div className={styles.infoStack}>
-          {sub.stack.map(s => (
-            <span key={s} className={styles.infoTag}>{s}</span>
-          ))}
-        </div>
-
-        <div className={styles.infoActions}>
-          <Link to={sub.caseStudy} className={styles.caseStudyLink}>case study →</Link>
-          {sub.live && (
-            <a href={sub.live} target="_blank" rel="noopener noreferrer" className={styles.liveLink}>
-              visit live ↗
+      {/* ── Vertical Subdomains Link Stack ── */}
+      <div className={styles.linksStack} key={domIdx}>
+        {domain.subs.map(subItem => {
+          const isRoot = subItem.slug === ''
+          const href = subItem.live || `https://${subItem.slug ? subItem.slug + '.' : ''}${domain.label}`
+          return (
+            <a
+              key={subItem.slug}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.portalLink}
+            >
+              {isRoot ? (
+                <span className={styles.linkRoot}>{domain.label}</span>
+              ) : (
+                <>
+                  <span className={styles.linkSlug}>{subItem.slug}</span>
+                  <span className={styles.linkSuffix}>.{domain.label}</span>
+                </>
+              )}
+              <span className={styles.linkArrow}>→</span>
             </a>
-          )}
-        </div>
+          )
+        })}
       </div>
     </div>
   )
