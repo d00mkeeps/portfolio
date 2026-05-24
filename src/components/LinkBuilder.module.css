@@ -43,6 +43,7 @@
   height: 192px; /* 3 slots visible (3 * 64px) */
   cursor: grab;
   user-select: none;
+  width: 320px;
 }
 
 .drumDragging {
@@ -51,38 +52,6 @@
 
 .drumDragging .drumTrack {
   transition: none !important;
-}
-
-.domainWrapper {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-
-/* domain prefix drum */
-.domainWrapper .drum:nth-of-type(1) {
-  width: var(--prefix-width, 192px);
-  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.domainWrapper .drum:nth-of-type(1) .drumItem {
-  justify-content: flex-end;
-  padding: 0;
-}
-
-/* suffix drum */
-.domainWrapper .drum:nth-of-type(2) {
-  width: var(--suffix-width, 48px);
-  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.domainWrapper .drum:nth-of-type(2) .drumItem {
-  justify-content: flex-start;
-  padding: 0;
-}
-
-.domainWrapper .dot {
-  padding: 0;
 }
 
 .drumFadeTop,
@@ -134,18 +103,40 @@
 
 /* ─── Links stack ────────────────────────────────────────────────────────────── */
 .linksStack {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 3.5rem;
+  width: 100%;
+  min-height: 250px; /* Lock height boundaries to prevent layout shifts */
+}
+
+.domainGroup {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  margin-top: 3.5rem;
-  animation: fadeUp 0.35s ease both;
-  min-height: 180px; /* Lock height boundaries to prevent layout shifts */
+  width: 100%;
+  max-width: 480px;
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+.domainGroupActive {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.domainGroupInactive {
+  opacity: 0;
+  transform: translate(-50%, 15px);
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .portalLink {
@@ -212,15 +203,19 @@
     font-size: 1.45rem;
   }
 
+  .drum {
+    width: 240px;
+  }
+
   .drumItem {
     font-size: 1.25rem;
   }
 
-  .domainWrapper .drum:nth-of-type(1) { width: var(--prefix-width-mobile, 144px); }
-  .domainWrapper .drum:nth-of-type(2) { width: var(--suffix-width-mobile, 36px); }
-
   .linksStack {
     min-height: 200px;
+  }
+
+  .domainGroup {
     gap: 0.75rem;
   }
 

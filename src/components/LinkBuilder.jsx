@@ -207,7 +207,6 @@ function LogoSquare({ children, small }) {
 // (/components/LinkBuilder)
 export default function LinkBuilder() {
   const [domIdx, setDomIdx] = useState(0)
-  const domain = DOMAINS[domIdx]
 
   const cycleDom = useCallback(dir => {
     const update = () => {
@@ -229,60 +228,47 @@ export default function LinkBuilder() {
 
       {/* ── URL bar ── */}
       <div className={styles.urlBar}>
-        <div
-          className={styles.domainWrapper}
-          style={{
-            '--prefix-width': domIdx === 0 ? '220px' : '80px',
-            '--suffix-width': domIdx === 0 ? '60px' : '40px',
-            '--prefix-width-mobile': domIdx === 0 ? '165px' : '55px',
-            '--suffix-width-mobile': domIdx === 0 ? '42px' : '28px'
-          }}
-        >
-          <Drum
-            items={DOMAINS}
-            activeIdx={domIdx}
-            onCycle={cycleDom}
-            itemKey={d => d.label}
-            renderItem={d => d.label.split('.')[0]}
-          />
-
-          <span className={styles.dot}>.</span>
-
-          <Drum
-            items={DOMAINS}
-            activeIdx={domIdx}
-            onCycle={cycleDom}
-            itemKey={d => d.label + '-suffix'}
-            renderItem={d => d.label.split('.')[1]}
-          />
-        </div>
+        <Drum
+          items={DOMAINS}
+          activeIdx={domIdx}
+          onCycle={cycleDom}
+          itemKey={d => d.label}
+          renderItem={d => d.label}
+        />
       </div>
 
       {/* ── Vertical Subdomains Link Stack ── */}
-      <div className={styles.linksStack} key={domIdx}>
-        {domain.subs.map(subItem => {
-          const isRoot = subItem.slug === ''
-          const href = subItem.live || `https://${subItem.slug ? subItem.slug + '.' : ''}${domain.label}`
-          return (
-            <a
-              key={subItem.slug}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.portalLink}
-            >
-              {isRoot ? (
-                <span className={styles.linkRoot}>{domain.label}</span>
-              ) : (
-                <>
-                  <span className={styles.linkSlug}>{subItem.slug}</span>
-                  <span className={styles.linkSuffix}>.{domain.label}</span>
-                </>
-              )}
-              <span className={styles.linkArrow}>→</span>
-            </a>
-          )
-        })}
+      <div className={styles.linksStack}>
+        {DOMAINS.map((dom, dIdx) => (
+          <div
+            key={dom.label}
+            className={`${styles.domainGroup} ${domIdx === dIdx ? styles.domainGroupActive : styles.domainGroupInactive}`}
+          >
+            {dom.subs.map(subItem => {
+              const isRoot = subItem.slug === ''
+              const href = subItem.live || `https://${subItem.slug ? subItem.slug + '.' : ''}${dom.label}`
+              return (
+                <a
+                  key={subItem.slug}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.portalLink}
+                >
+                  {isRoot ? (
+                    <span className={styles.linkRoot}>{dom.label}</span>
+                  ) : (
+                    <>
+                      <span className={styles.linkSlug}>{subItem.slug}</span>
+                      <span className={styles.linkSuffix}>.{dom.label}</span>
+                    </>
+                  )}
+                  <span className={styles.linkArrow}>→</span>
+                </a>
+              )
+            })}
+          </div>
+        ))}
       </div>
     </div>
   )
