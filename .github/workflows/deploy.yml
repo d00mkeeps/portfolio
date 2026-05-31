@@ -33,4 +33,4 @@ jobs:
             ConnectTimeout 30
             IdentityFile ~/.ssh/id_deploy" > ~/.ssh/config
           ssh "$SERVER_USER@$SSH_HOSTNAME" \
-              "cd /home/miles/portfolio && git pull origin main && docker compose up -d --build"
+              "cd /home/miles/portfolio && git fetch origin main && git reset --hard origin/main && docker compose up -d --build"
