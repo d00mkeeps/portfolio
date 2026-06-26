@@ -7,12 +7,20 @@ import styles from './Blog.module.css'
 // Vite glob import — picks up all MDX files in /posts
 const postModules = import.meta.glob('../posts/*.mdx', { eager: true })
 
+function estimateReadingTime(raw) {
+  const WPS = 238 // average words per second for technical reading
+  const words = raw.trim().split(/\s+/).length
+  const minutes = Math.ceil(words / WPS)
+  return minutes
+}
+
 function getPosts() {
   return Object.entries(postModules)
     .map(([path, mod]) => {
       const slug = path.replace('../posts/', '').replace('.mdx', '')
       const { title, date, summary, tags } = mod.frontmatter ?? {}
-      return { slug, title, date, summary, tags }
+      const minutes = estimateReadingTime(mod.raw ?? '')
+      return { slug, title, date, summary, tags, minutes }
     })
     .filter(p => p.title)
     .sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -42,6 +50,7 @@ export default function Blog() {
                   <Link to={`/blog/${post.slug}`} className={styles.postLink}>
                     <div className={styles.meta}>
                       <time className={styles.date}>{post.date}</time>
+                      <span className={styles.readingTime}>{post.minutes} min read</span>
                       {post.tags?.map(t => (
                         <span key={t} className={styles.tag}>{t}</span>
                       ))}

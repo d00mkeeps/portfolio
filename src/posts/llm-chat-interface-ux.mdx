@@ -1,0 +1,193 @@
+---
+title: LLM Chat Interface UX
+date: 2026-02-11
+summary: Latency, reasoning UX, and a bug I found in the Google Gemini UI — what I learned shipping reasoning for a fitness coaching agent.
+tags: [ai, ux, llm, volc]
+---
+
+*This was originally published on Substack on 11 February 2026. Republished here on 26 June 2026.*
+
+---
+
+*this blog was written by a human*
+
+This week I shipped reasoning for Volc, my fitness coaching agent, to enhance performance and enable better telemetry for Crucible.
+
+During this process I also accidentally reduced latency by ~15s (75%) for complex queries and ~11.5s (88%) for simple queries and found a major bug in the Google Gemini UI.
+
+This post will cover the process of significantly improving system architecture for greatly reduced latency, and then will examine the chat interface for several leading AI providers (Anthropic, Google, OpenAI, xAI) and apply them to my own chat interface.
+
+## The latency problem
+
+In mid-late January, I shipped a minor update to connect Volc to my automated QA platform, Crucible. While the integration was successful, I had inadvertently skyrocketed end-to-end latency to **18-20s on each message**, regardless of complexity.
+
+**Latency was sky-high, and it was killing engagement.**
+
+![user messages by day — notice the steep decline when v1.5.11 shipped in late Jan and spike in messages shortly after shipping the fix in early Feb](/blog/llm-chat-interface-ux/latency.webp)
+
+After fixing things, I can confidently identify the culprit:
+
+**A 'ToolSelector' that performed a first pass on any incoming queries to determine if tool calls would be needed.**
+
+The thought process behind ToolSelector was that I could assign a cheap model for tool use and an expensive model for main response generation, reducing latency and cost. It worked reasonably well (albeit adding significant technical complexity) and I was pleased to have found a novel solution, even if it was clunky.
+
+The problems came when I introduced reasoning to the ToolSelector to get a better look inside the thought process when we didn't get expected behavior. As it turns out, giving context management responsibilities to a cheap LLM instance that has no reasoning and limited context is not conducive with high-quality output..
+
+Here's how it worked:
+
+![crude architectural diagram](/blog/llm-chat-interface-ux/architecture.png)
+
+These metrics were taken AFTER the ToolSelector was given reasoning capabilities. Due to the nature of the pipeline, the 10s overhead was present on all messages regardless of complexity.
+
+The solution? Remove the ToolSelector entirely, give the main 'Coach LLM' responsibility for its own tool calls, and run more benchmarks.
+
+The result?
+
+**Avg TTFT across 5 messages**: 7.1s (Range: 3.3s - 8.8s)
+
+*TTFT: Time to First Token, a common benchmark in LLM evaluation*
+
+This is way better than the 18-20s observed initially! Better yet, the presence of reasoning tokens lets us show the user *something* before the end response, further enhancing **perceived latency**.
+
+## LLM reasoning UX: A review
+
+After fixing the underlying architectural issues causing massive latency, it's time to evaluate more surface-level UX.
+
+"**0.1 second** is about the limit for having the user feel that the system is **reacting instantaneously.**
+
+**1.0 second** is about the limit for the **user's flow of thought** to stay uninterrupted.
+
+**…10 seconds** is about the limit for **keeping the user's attention** focused on the dialogue. For longer delays, users should be given feedback indicating when the computer expects to be done." - [Jakob Nielsen](https://www.nngroup.com/articles/response-times-3-important-limits/)
+
+While we seldom expect to return intelligent response within the 1.0 second threshold, we should aim to show responsiveness as quickly as possible. One key advantage of a reasoning-enabled workflow is that we can display internal thoughts before showing a final response.
+
+In my experience in working with Agentic systems, reasoning tokens aren't inherently useful toward a task's end goal. They serve as a 'scratchpad' for the LLM to organise thoughts, context, and strategy before the final response.
+
+**Reasoning tokens are better used to improve final output quality and signal responsiveness than as output themselves.**
+
+That being said, let's take a quick look at how the most popular interfaces use reasoning tokens.
+
+#### ChatGPT (OpenAI)
+
+I'm kicking things off with the ChatGPT interface. I've asked it to describe cheeseburgers in terms of wavelength particles to force out a thought sequence.
+
+![ChatGPT reasoning UI — 4/10](/blog/llm-chat-interface-ux/chatgpt.gif)
+
+**What I like:**
+
+- Reasoning doesn't open by default
+- Dynamic loading indicator
+- Timer on reasoning/thinking
+
+**What I don't like:**
+
+- Modal display is clunky
+- We're allowed to open the reasoning display before content is ready
+- Reasoning stays visible by default even after main content is available
+
+#### Claude (Anthropic)
+
+This is my favorite LLM interface of the bunch. It's simple and engaging!
+
+I've moved to Gemini for heavy coding/research tasks due to restrictive rate limits on Claude but still use Claude for personal chats. Interestingly, I found a minor bug in the reasoning summary mechanism! More info below.
+
+We're drawing out a solid block of reasoning by asking it to compare the three body problem, Blackbeard the pirate, and a moldy onion.
+
+![Claude reasoning UI — 8/10](/blog/llm-chat-interface-ux/claude.webp)
+
+**What I like:**
+
+- Dynamic reasoning header is engaging without showing full reasoning text
+- Visually engaging loading icon
+- Smooth transition between showing and hiding the reasoning text
+
+**What I don't like:**
+
+- No timer! There was one here before, but it's been removed in a recent update. I wonder why?
+
+**Bug:**
+
+As you'll see below, the summary provided in the collapsed state is provided by an external LLM and struggles to handle attachment-only messages.
+
+![Claude bug — attachment-only summary glitch](/blog/llm-chat-interface-ux/claude2.webp)
+
+This is a purely visual defect, but it's still interesting to unearth inconsistencies in an interface that was responsible for [~15% of Anthropic's $1bn in revenue](https://www.businessofapps.com/data/claude-statistics/) in Q3 2025.
+
+Nobody's perfect, I guess.
+
+#### Gemini (Google)
+
+This was by far the worst UX tested. The reasoning here is completely broken, with a scroll bug jolting us back to the top of the screen when we try to scroll down beyond a certain point in the expanded reasoning display.
+
+Additionally, it was difficult to reliably get the model to reason whatsoever even with the 'Thinking' setting enabled.
+
+(I was able to force some thinking out by explicitly telling the LLM 'You were meant to think before responding')
+
+![Gemini reasoning UI — 1/10](/blog/llm-chat-interface-ux/gemini.webp)
+
+**What I like:**
+
+- Gemini is cheap. As a student, I have a free pro subscription. How much right do I have to complain about a free product?
+- The loader is engaging, the collapsed state works fine.
+
+**What I don't like:**
+
+- The thinking mode doesn't seem to actually force the LLM to think. If the button doesn't force thinking, why is it in the UI?
+- The broken scroll is laughable. I don't imagine Google would've released Gemini without testing the UX thoroughly, and they're certainly capable of fixing a scroll bug. What gives?
+- The 'answer now' button represents an escape hatch for users who decide a higher answer quality isn't worth the wait. Similar to the 'Thinking mode' option that doesn't consistently activate reasoning mode, this feels like it undermines the user's decision to enable reasoning.
+
+#### Grok (xAI)
+
+Not much to comment on here. It feels the most boring to use, and that's completely subjective.
+
+![Grok reasoning UI — 5/10](/blog/llm-chat-interface-ux/grok.webp)
+
+**What I like:**
+
+- The timer is good
+- We aren't bombarded by rapid-fire paragraphs of reasoning text like in Gemini or ChatGPT
+
+**What I don't like:**
+
+- The reasoning doesn't fully collapse in the collapsed state. We still get several lines detailing thought process.
+- The 'Quick Answer' button feels like a cop-out. Similar to Gemini, it's the app's way of asking the user "Are you sure you're happy to wait?"
+
+While not reasoning UX, I wanted to make note of a number at the bottom of Grok responses which typically claims the first chunk took under a second.
+
+This may be true for an internal process, but the final output usually takes 15-30s to begin generating and this incredibly low latency figure feels pointless at best— dishonest at worst.
+
+![First response (summary) token took 20s to create — why are we shown 575ms in the UI?](/blog/llm-chat-interface-ux/grok2.webp)
+
+#### Volc
+
+This is my own interface which I've applied key takeaways from the above products to. I won't be rating it, and I think specificity is a key factor here; my app has a much more specific purpose than the products seen above, which poses a significant advantage.
+
+![Volc reasoning UI — unrated](/blog/llm-chat-interface-ux/volc.webp)
+
+**Where I took inspiration:**
+
+- Loading icon is inspired by Claude's loader
+- Similar to Grok, I'm only showing the main ideas of reasoning blocks
+- Chose to include a timer in the reasoning, similar to Gemini, Grok, and ChatGPT
+
+**Original design points:**
+
+- As mentioned earlier, I believe reasoning isn't as important to the user and shouldn't compete for mental bandwidth. Volc doesn't save thoughts. Once overwritten by another thought or final output, they're gone forever.
+- I'm also not showing the reasoning subtext immediately. This is to reduce UX friction caused by abruptly showing multiple components. The user's need for stimulation is immediately satisfied by the loader and next by the subtext.
+
+**Further improvements:**
+
+- I'm well aware the design isn't perfect. The streamed workout template component renders as a JSON code block for a split-second, and the timer very briefly shows '0s' when thinking is complete.
+- The reasoning subtext sometimes doesn't change as often as I'd like, causing boring UX on longer, tool-enabled messages. There are ways to work around this but it's not an immediate concern.
+
+## Conclusion
+
+The fact the broken code made it to production was a mistake. I was knee-deep in a sprint to get Crucible live and skipped my usual CI/CD process in favor of exposing the new reasoning telemetry.
+
+In hindsight, I'm glad it happened though! My beta users will forgive me and it ultimately led me to improve my product by learning from current leaders in the industry. The new agent architecture in Volc is cheaper, more maintainable, and more performant.
+
+As humans we're developing a reliance on a constant trickle of information. Too much and we're overwhelmed, too little and we find something else to look at! The intersection of AI and UX is a fascinating art of carefully managing this trickle of data, and I'm excited to see how things evolve over the next few years.
+
+If you've got any questions, further thoughts, or opposing ideas: I'd love to hear it in the comments or you can email me at miles.i.hillary@gmail.com.
+
+Until next time,

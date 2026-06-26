@@ -6,6 +6,12 @@ import styles from './BlogPost.module.css'
 
 const postModules = import.meta.glob('../posts/*.mdx', { eager: true })
 
+function estimateReadingTime(raw) {
+  const WPS = 238
+  const words = raw.trim().split(/\s+/).length
+  return Math.ceil(words / WPS)
+}
+
 export default function BlogPost() {
   const { slug } = useParams()
   const mod = postModules[`../posts/${slug}.mdx`]
@@ -27,6 +33,7 @@ export default function BlogPost() {
 
   const Content = mod.default
   const { title, date, summary } = mod.frontmatter ?? {}
+  const minutes = estimateReadingTime(mod.raw ?? '')
 
   return (
     <>
@@ -37,6 +44,7 @@ export default function BlogPost() {
 
           <header className={styles.header}>
             {date && <time className={styles.date}>{date}</time>}
+            <span className={styles.readingTime}>{minutes} min read</span>
             <h1 className={styles.title}>{title}</h1>
             {summary && <p className={styles.summary}>{summary}</p>}
           </header>

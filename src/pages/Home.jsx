@@ -210,7 +210,7 @@ export default function Home() {
               <p className={styles.bioLine}>Domains: AI tooling, Finance, Neuroscience, Healthcare, B2C.</p>
               <p className={styles.bioLine}>Available from September 2027. London preferred.</p>
             </div>
-            <a href="https://calendly.com/yourusername" target="_blank" rel="noopener noreferrer" className={styles.bookCall}>
+            <a href="https://calendly.com/miles-i-hillary/30min" target="_blank" rel="noopener noreferrer" className={styles.bookCall}>
               book a call →
             </a>
           </section>
