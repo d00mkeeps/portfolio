@@ -20,7 +20,6 @@ export default function Nav() {
           <span className={styles.logoSquare}>MH</span>
         </Link>
         <div className={styles.links}>
-          <Link to="/#work" className={styles.link}>work</Link>
           <Link to="/blog" className={`${styles.link} ${pathname.startsWith('/blog') ? styles.active : ''}`}>blog</Link>
           <div className={styles.contactWrap}>
             <button
@@ -31,19 +30,19 @@ export default function Nav() {
             </button>
             {contactOpen && (
               <div className={styles.contactMenu}>
-                <a href="mailto:hello@volc.uk" className={styles.contactItem}>
+                <a href="mailto:miles.i.hillary@gmail.com" className={styles.contactItem}>
                   <span className={styles.contactLabel}>email</span>
-                  <span className={styles.contactValue}>hello@volc.uk</span>
+                  <span className={styles.contactValue}>miles.i.hillary@gmail.com</span>
                 </a>
-                <a href="https://calendly.com/yourusername" target="_blank" rel="noopener noreferrer" className={styles.contactItem}>
+                <a href="https://calendly.com/miles-i-hillary/30min" target="_blank" rel="noopener noreferrer" className={styles.contactItem}>
                   <span className={styles.contactLabel}>call</span>
-                  <span className={styles.contactValue}>book 20 mins</span>
+                  <span className={styles.contactValue}>book 30 mins</span>
                 </a>
-                <a href="https://linkedin.com/in/yourlinkedin" target="_blank" rel="noopener noreferrer" className={styles.contactItem}>
+                <a href="https://www.linkedin.com/in/miles-hillary/" target="_blank" rel="noopener noreferrer" className={styles.contactItem}>
                   <span className={styles.contactLabel}>linkedin</span>
                   <span className={styles.contactValue}>miles hillary</span>
                 </a>
-                <a href="https://github.com/yourgithub" target="_blank" rel="noopener noreferrer" className={styles.contactItem}>
+                <a href="https://github.com/d00mkeeps" target="_blank" rel="noopener noreferrer" className={styles.contactItem}>
                   <span className={styles.contactLabel}>github</span>
                   <span className={styles.contactValue}>d00mkeeps</span>
                 </a>

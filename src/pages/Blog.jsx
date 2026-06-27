@@ -37,7 +37,7 @@ export default function Blog() {
           <header className={styles.header}>
             <h1 className={styles.title}>Blog</h1>
             <p className={styles.sub}>
-              Case studies, notes on systems, and occasional opinions.
+              Case studies and notes on systems.
             </p>
           </header>
 

@@ -207,7 +207,7 @@ export default function Home() {
             <div className={styles.bioLines}>
               <p className={styles.bioLine}>Building software to solve problems since 2023. Two live iOS products.</p>
               <p className={styles.bioLine}>Idea to product in 6 weeks.</p>
-              <p className={styles.bioLine}>Domains: AI tooling, Finance, Neuroscience, Healthcare, B2C.</p>
+              <p className={styles.bioLine}>Domains: AI tooling, Finance, Biology, Healthcare, B2C.</p>
               <p className={styles.bioLine}>Available from September 2027. London preferred.</p>
             </div>
             <a href="https://calendly.com/miles-i-hillary/30min" target="_blank" rel="noopener noreferrer" className={styles.bookCall}>
@@ -286,22 +286,6 @@ export default function Home() {
                 <p className={styles.cardPlaceholder}>copy coming soon</p>
               </article>
 
-            </div>
-          </section>
-
-          {/* ── Blog ── */}
-          <section className={styles.blog}>
-            <p className={styles.sectionLabel}>writing</p>
-            <div className={styles.blogGrid}>
-              <article className={`${styles.card} ${styles.cardBlog}`}>
-                <span className={styles.cardDate}>Feb 2026</span>
-                <div className={styles.blogMeta}>
-                  <span className={styles.blogTag}>AI · UX</span>
-                </div>
-                <h3 className={styles.blogTitle}>LLM Chat Interface UX</h3>
-                <p className={styles.blogSummary}>Reviewing reasoning UX across ChatGPT, Claude, Gemini, and Grok — and what I applied to Volc.</p>
-                <Link to="/blog/llm-chat-interface-ux" className={styles.cardLink}>read →</Link>
-              </article>
             </div>
           </section>
 

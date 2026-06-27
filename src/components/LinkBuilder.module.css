@@ -1,226 +1,44 @@
 /* ─── Root ───────────────────────────────────────────────────────────────────── */
 .root {
+  padding: 3.5rem 0 4rem;
+}
+
+/* ─── Links ──────────────────────────────────────────────────────────────────── */
+.links {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0;
-  padding: 5rem 0 4rem;
+  gap: 0.85rem;
 }
 
-.label {
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 2rem;
-}
-
-/* ─── URL bar ────────────────────────────────────────────────────────────────── */
-.urlBar {
+.link {
   display: flex;
-  justify-content: center;
   align-items: center;
+  gap: 0.75rem;
   font-family: var(--font-mono);
-  font-size: 1.75rem; /* Scaled up */
-  user-select: none;
-  width: 100%;
-}
-
-.dot {
-  padding: 0 0.18rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
-  font-size: 1.95rem;
-  display: flex;
-  align-items: center;
-  height: 64px; /* Scaled up */
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 5px rgba(255, 255, 255, 0.2);
-}
-
-/* ─── Drum ───────────────────────────────────────────────────────────────────── */
-.drum {
-  position: relative;
-  overflow: hidden;
-  height: 192px; /* 3 slots visible (3 * 64px) */
-  cursor: grab;
-  user-select: none;
-  width: 320px;
-}
-
-.drumDragging {
-  cursor: grabbing !important;
-}
-
-.drumDragging .drumTrack {
-  transition: none !important;
-}
-
-.drumFadeTop,
-.drumFadeBottom {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 64px; /* Covers exactly one slot height */
-  z-index: 2;
-  pointer-events: none;
-}
-
-.drumFadeTop {
-  top: 0;
-  background: linear-gradient(to bottom, var(--bg), transparent);
-}
-
-.drumFadeBottom {
-  bottom: 0;
-  background: linear-gradient(to top, var(--bg), transparent);
-}
-
-.drumTrack {
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.drumItem {
-  height: 64px; /* Scaled up */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.65rem; /* Scaled up */
-  color: var(--text-muted);
-  opacity: 0.45;
-  padding: 0;
-  transition: color 0.2s, opacity 0.2s;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.drumItemActive {
-  color: var(--text);
-  opacity: 1;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 5px rgba(255, 255, 255, 0.3), 0 0 2px rgba(255, 255, 255, 0.2);
-  cursor: default;
-}
-
-/* ─── Links stack ────────────────────────────────────────────────────────────── */
-.linksStack {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin-top: 3.5rem;
-  width: 100%;
-  min-height: 250px; /* Lock height boundaries to prevent layout shifts */
-}
-
-.domainGroup {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  max-width: 480px;
-  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
-}
-
-.domainGroupActive {
-  opacity: 1;
-  transform: translate(-50%, 0);
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.domainGroupInactive {
-  opacity: 0;
-  transform: translate(-50%, 15px);
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.portalLink {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 1.25rem;
-  color: var(--text-muted);
-  opacity: 0.5;
   text-decoration: none;
-  transition: opacity 0.25s, color 0.25s, transform 0.25s;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  transition: color 0.2s, transform 0.2s;
 }
 
-.portalLink:hover {
-  opacity: 1;
+.link:hover {
   color: var(--text);
   transform: translateX(4px);
 }
 
 .linkSlug {
-  color: var(--text);
   font-weight: 500;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
-}
-
-.linkSuffix {
-  color: var(--text-muted);
-  opacity: 0.7;
-}
-
-.linkRoot {
-  color: var(--text-dim);
-  transition: color 0.25s;
-}
-
-.portalLink:hover .linkRoot {
-  color: var(--text);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
 }
 
 .linkArrow {
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.25s, transform 0.25s;
   color: var(--accent);
-  font-size: 1.1rem;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s, transform 0.2s;
+  font-size: 0.85rem;
 }
 
-.portalLink:hover .linkArrow {
+.link:hover .linkArrow {
   opacity: 1;
   transform: translateX(0);
-}
-
-/* ─── Mobile ─────────────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .urlBar {
-    font-size: 1.3rem;
-  }
-
-  .dot {
-    font-size: 1.45rem;
-  }
-
-  .drum {
-    width: 240px;
-  }
-
-  .drumItem {
-    font-size: 1.25rem;
-  }
-
-  .linksStack {
-    min-height: 200px;
-  }
-
-  .domainGroup {
-    gap: 0.75rem;
-  }
-
-  .portalLink {
-    font-size: 1.05rem;
-    padding: 0.4rem 0.8rem;
-  }
 }
