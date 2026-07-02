@@ -1,25 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Nav from '../components/Nav.jsx'
-import Footer from '../components/Footer.jsx'
 import { projects } from '../lib/projects.js'
 import styles from './ProjectPage.module.css'
 
 export default function ProjectPage() {
   const { slug } = useParams()
   const project = projects.find(p => p.slug === slug)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    setVisible(false)
+    const t = setTimeout(() => setVisible(true), 50)
+    return () => clearTimeout(t)
+  }, [slug])
 
   if (!project) {
     return (
       <>
         <Nav />
-        <main className={styles.main}>
+        <main className={`${styles.main} ${visible ? styles.visible : ''}`}>
           <div className="container">
             <p className={styles.notFound}>Project not found.</p>
             <Link to="/#projects" className={styles.back}>← back</Link>
           </div>
         </main>
-        <Footer />
       </>
     )
   }
@@ -29,7 +34,7 @@ export default function ProjectPage() {
   return (
     <>
       <Nav />
-      <main className={styles.main}>
+      <main className={`${styles.main} ${visible ? styles.visible : ''}`}>
         <div className="container">
           <Link to="/#projects" className={styles.back}>← work</Link>
 
@@ -80,7 +85,6 @@ export default function ProjectPage() {
           </section>
         </div>
       </main>
-      <Footer />
     </>
   )
 }

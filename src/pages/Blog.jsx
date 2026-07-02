@@ -1,25 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav.jsx'
-import Footer from '../components/Footer.jsx'
 import styles from './Blog.module.css'
 
-// Vite glob import — picks up all MDX files in /posts
 const postModules = import.meta.glob('../posts/*.mdx', { eager: true })
 
-function estimateReadingTime(raw) {
-  const WPS = 238 // average words per second for technical reading
-  const words = raw.trim().split(/\s+/).length
-  const minutes = Math.ceil(words / WPS)
-  return minutes
+function formatDate(dateStr) {
+  const d = new Date(dateStr)
+  const day = String(d.getDate()).padStart(2, '0')
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const year = d.getFullYear()
+  return `${day}/${month}/${year}`
 }
 
 function getPosts() {
   return Object.entries(postModules)
     .map(([path, mod]) => {
       const slug = path.replace('../posts/', '').replace('.mdx', '')
-      const { title, date, summary, tags } = mod.frontmatter ?? {}
-      const minutes = estimateReadingTime(mod.raw ?? '')
+      const { title, date, summary, tags, minutes } = mod.frontmatter ?? {}
       return { slug, title, date, summary, tags, minutes }
     })
     .filter(p => p.title)
@@ -28,44 +26,35 @@ function getPosts() {
 
 export default function Blog() {
   const posts = getPosts()
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 50)
+    return () => clearTimeout(t)
+  }, [])
 
   return (
     <>
       <Nav />
-      <main className={styles.main}>
+      <main className={`${styles.main} ${visible ? styles.visible : ''}`}>
         <div className="container">
-          <header className={styles.header}>
-            <h1 className={styles.title}>Blog</h1>
-            <p className={styles.sub}>
-              Case studies and notes on systems.
-            </p>
-          </header>
-
-          {posts.length === 0 ? (
-            <p className={styles.empty}>Posts coming soon.</p>
-          ) : (
-            <ol className={styles.list}>
-              {posts.map((post, i) => (
-                <li key={post.slug} className={styles.item} style={{ animationDelay: `${i * 60}ms` }}>
-                  <Link to={`/blog/${post.slug}`} className={styles.postLink}>
-                    <div className={styles.meta}>
-                      <time className={styles.date}>{post.date}</time>
-                      <span className={styles.readingTime}>{post.minutes} min read</span>
-                      {post.tags?.map(t => (
-                        <span key={t} className={styles.tag}>{t}</span>
-                      ))}
-                    </div>
-                    <h2 className={styles.postTitle}>{post.title}</h2>
-                    {post.summary && <p className={styles.summary}>{post.summary}</p>}
-                    <span className={styles.readMore}>read →</span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          )}
+          <ol className={styles.list}>
+            {posts.map((post, i) => (
+              <li key={post.slug} className={styles.item} style={{ animationDelay: `${i * 60}ms` }}>
+                <Link to={`/blog/${post.slug}`} className={styles.postLink}>
+                  <div className={styles.meta}>
+                    <time className={styles.date}>{formatDate(post.date)}</time>
+                    <span className={styles.readingTime}>{post.minutes} min read</span>
+                  </div>
+                  <h2 className={styles.postTitle}>{post.title}</h2>
+                  {post.summary && <p className={styles.summary}>{post.summary}</p>}
+                  <span className={styles.readMore}>read →</span>
+                </Link>
+              </li>
+            ))}
+          </ol>
         </div>
       </main>
-      <Footer />
     </>
   )
 }
