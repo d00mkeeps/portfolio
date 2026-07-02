@@ -2,6 +2,12 @@
   padding-top: 8rem;
   padding-bottom: 4rem;
   min-height: 100vh;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.visible {
+  opacity: 1;
 }
 
 .back {

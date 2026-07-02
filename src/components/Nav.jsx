@@ -20,20 +20,17 @@ export default function Nav() {
           <span className={styles.logoSquare}>MH</span>
         </Link>
         <div className={styles.links}>
+          <Link to="/" className={`${styles.link} ${pathname === '/' ? styles.active : ''}`}>home</Link>
           <Link to="/blog" className={`${styles.link} ${pathname.startsWith('/blog') ? styles.active : ''}`}>blog</Link>
           <div className={styles.contactWrap}>
             <button
               className={styles.link}
               onClick={() => setContactOpen(o => !o)}
             >
-              contact {contactOpen ? '↑' : '↓'}
+              contact
             </button>
             {contactOpen && (
               <div className={styles.contactMenu}>
-                <a href="mailto:miles.i.hillary@gmail.com" className={styles.contactItem}>
-                  <span className={styles.contactLabel}>email</span>
-                  <span className={styles.contactValue}>miles.i.hillary@gmail.com</span>
-                </a>
                 <a href="https://calendly.com/miles-i-hillary/30min" target="_blank" rel="noopener noreferrer" className={styles.contactItem}>
                   <span className={styles.contactLabel}>call</span>
                   <span className={styles.contactValue}>book 30 mins</span>
