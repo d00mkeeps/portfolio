@@ -28,6 +28,11 @@ const SUBS = [
     label: 'tax.mileshillary.com',
     live: 'https://tax.mileshillary.com',
   },
+  {
+    slug: 'volc',
+    label: 'volc.mileshillary.com',
+    live: 'https://apps.apple.com/gb/app/volc-ai-gym-coach/id6751469055',
+  },
 ]
 
 // ─── Main component ───────────────────────────────────────────────────────────
