@@ -157,6 +157,7 @@
 .appStoreBadge {
   display: inline-block;
   transition: opacity 0.2s;
+  text-decoration: none;
 }
 
 .appStoreBadge:hover {
