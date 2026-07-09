@@ -4,9 +4,9 @@ import styles from './LinkBuilder.module.css'
 // ─── Data ────────────────────────────────────────────────────────────────────
 const SUBS = [
   {
-    slug: 'brain',
-    label: 'brain.mileshillary.com',
-    live: 'https://brain.mileshillary.com',
+    slug: 'volc',
+    label: 'volc.mileshillary.com',
+    live: 'https://apps.apple.com/gb/app/volc-ai-gym-coach/id6751469055',
   },
   {
     slug: 'clearbox',
@@ -14,26 +14,26 @@ const SUBS = [
     live: null,
   },
   {
-    slug: 'qa',
-    label: 'qa.mileshillary.com',
-    live: 'https://qa.mileshillary.com',
-  },
-  {
     slug: 'tax',
     label: 'tax.mileshillary.com',
     live: 'https://tax.mileshillary.com',
   },
   {
-    slug: 'volc',
-    label: 'volc.mileshillary.com',
-    live: 'https://apps.apple.com/gb/app/volc-ai-gym-coach/id6751469055',
+    slug: 'brain',
+    label: 'brain.mileshillary.com',
+    live: 'https://brain.mileshillary.com',
+  },
+  {
+    slug: 'qa',
+    label: 'qa.mileshillary.com',
+    live: 'https://qa.mileshillary.com',
   },
 ]
 
 // API-compatible status mapping
 const STATUS_MAP = {
   clearbox: { state: 'live' },
-  brain: { state: 'live' },
+  brain: { state: 'archived' },
   qa: { state: 'archived' },
   tax: { state: 'live' },
   volc: { state: 'updating', detail: 'v1.x in App Review' },
