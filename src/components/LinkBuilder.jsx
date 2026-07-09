@@ -86,12 +86,12 @@ export default function LinkBuilder() {
 
       <div className={styles.legend}>
         <div className={styles.legendItem}>
-          <span className={`${styles.dot} ${styles.live}`} />
-          <span className={styles.legendLabel}>live</span>
-        </div>
-        <div className={styles.legendItem}>
           <span className={`${styles.dot} ${styles.updating}`} />
           <span className={styles.legendLabel}>update pending</span>
+        </div>
+        <div className={styles.legendItem}>
+          <span className={`${styles.dot} ${styles.live}`} />
+          <span className={styles.legendLabel}>live</span>
         </div>
         <div className={styles.legendItem}>
           <span className={`${styles.dot} ${styles.archived}`} />
