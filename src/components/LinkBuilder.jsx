@@ -4,11 +4,6 @@ import styles from './LinkBuilder.module.css'
 // ─── Data ────────────────────────────────────────────────────────────────────
 const SUBS = [
   {
-    slug: '',
-    label: 'mileshillary.com',
-    live: 'https://mileshillary.com',
-  },
-  {
     slug: 'clearbox',
     label: 'clearbox.mileshillary.com',
     live: null,
@@ -35,6 +30,30 @@ const SUBS = [
   },
 ]
 
+// API-compatible status mapping
+const STATUS_MAP = {
+  clearbox: { state: 'live' },
+  brain: { state: 'live' },
+  qa: { state: 'archived' },
+  tax: { state: 'live' },
+  volc: { state: 'updating', detail: 'v1.x in App Review' },
+}
+
+const STATUS_CONFIGS = {
+  live: {
+    className: styles.live,
+    defaultLabel: 'live',
+  },
+  updating: {
+    className: styles.updating,
+    defaultLabel: 'update pending',
+  },
+  archived: {
+    className: styles.archived,
+    defaultLabel: 'archived',
+  },
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function LinkBuilder() {
   return (
@@ -42,6 +61,9 @@ export default function LinkBuilder() {
       <div className={styles.links}>
         {SUBS.map(sub => {
           const href = sub.live || `https://${sub.slug}.mileshillary.com`
+          const status = STATUS_MAP[sub.slug]
+          const statusConfig = status ? STATUS_CONFIGS[status.state] : null
+
           return (
             <a
               key={sub.slug}
@@ -50,11 +72,31 @@ export default function LinkBuilder() {
               rel="noopener noreferrer"
               className={styles.link}
             >
-              <span className={styles.linkSlug}>{sub.slug || 'mileshillary.com'}</span>
+              {statusConfig && (
+                <span className={styles.status}>
+                  <span className={`${styles.dot} ${statusConfig.className}`} />
+                </span>
+              )}
+              <span className={styles.linkSlug}>{sub.slug}</span>
               <span className={styles.linkArrow}>→</span>
             </a>
           )
         })}
+      </div>
+
+      <div className={styles.legend}>
+        <div className={styles.legendItem}>
+          <span className={`${styles.dot} ${styles.live}`} />
+          <span className={styles.legendLabel}>live</span>
+        </div>
+        <div className={styles.legendItem}>
+          <span className={`${styles.dot} ${styles.updating}`} />
+          <span className={styles.legendLabel}>update pending</span>
+        </div>
+        <div className={styles.legendItem}>
+          <span className={`${styles.dot} ${styles.archived}`} />
+          <span className={styles.legendLabel}>archived</span>
+        </div>
       </div>
     </div>
   )
