@@ -4,14 +4,14 @@ import styles from './LinkBuilder.module.css'
 // ─── Data ────────────────────────────────────────────────────────────────────
 const SUBS = [
   {
-    slug: 'clearbox',
-    label: 'clearbox.mileshillary.com',
-    live: null,
-  },
-  {
     slug: 'brain',
     label: 'brain.mileshillary.com',
     live: 'https://brain.mileshillary.com',
+  },
+  {
+    slug: 'clearbox',
+    label: 'clearbox.mileshillary.com',
+    live: null,
   },
   {
     slug: 'qa',
