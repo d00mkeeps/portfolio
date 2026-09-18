@@ -1,0 +1,319 @@
+.container {
+  min-height: 100vh;
+  background-color: #0b0c10;
+  color: #e0e6ed;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Top Bar ── */
+.topbar {
+  background-color: #12141c;
+  border-bottom: 1px solid #1f2330;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoSquare {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #f8fafc;
+}
+
+.badge {
+  background: rgba(37, 99, 235, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-family: monospace;
+}
+
+.statsBar {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.statVal {
+  color: #f1f5f9;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.topActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.actionBtn {
+  background: #1e2433;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.actionBtn:hover {
+  background: #273147;
+  color: #ffffff;
+  border-color: #475569;
+}
+
+.primaryBtn {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+
+.primaryBtn:hover {
+  background: #1d4ed8;
+}
+
+/* ── Tabs Navigation ── */
+.tabNav {
+  display: flex;
+  background: #0f1117;
+  border-bottom: 1px solid #1e2230;
+  padding: 0 1.5rem;
+  overflow-x: auto;
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.85rem 1.25rem;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.15s ease;
+}
+
+.tabBtn:hover {
+  color: #f1f5f9;
+}
+
+.tabBtn.active {
+  color: #38bdf8;
+  border-bottom-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.05);
+}
+
+/* ── Main Viewport ── */
+.viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #08090d;
+}
+
+.frameHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 1.5rem;
+  background: #12141c;
+  border-bottom: 1px solid #1a1e2b;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.frameUrl {
+  font-family: monospace;
+  color: #64748b;
+  background: #090a0f;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.iframeWrapper {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 140px);
+}
+
+.dashboardFrame {
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 140px);
+  border: none;
+  background: #0b0c10;
+}
+
+/* ── Operator Ops Tab Content ── */
+.opsContent {
+  padding: 2rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background: #121520;
+  border: 1px solid #1e2433;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.cardTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.cardValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #38bdf8;
+  font-family: monospace;
+}
+
+.cardSub {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f8fafc;
+  margin-bottom: 1rem;
+}
+
+.projectTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #121520;
+  border: 1px solid #1e2433;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.projectTable th,
+.projectTable td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #1b202e;
+  font-size: 0.85rem;
+}
+
+.projectTable th {
+  background: #161a27;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.statusDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.dotLive {
+  background-color: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+
+.dotUpdating {
+  background-color: #eab308;
+  box-shadow: 0 0 8px rgba(234, 179, 8, 0.4);
+}
+
+.dotOffline {
+  background-color: #64748b;
+}
+
+.dotDegraded {
+  background-color: #f97316;
+}
+
+.deployTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #121520;
+  border: 1px solid #1e2433;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.deployTable th,
+.deployTable td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #1b202e;
+}
+
+.deployTable th {
+  background: #161a27;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}

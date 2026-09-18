@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './LinkBuilder.module.css'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -11,7 +11,12 @@ const SUBS = [
   {
     slug: 'clearbox',
     label: 'clearbox.mileshillary.com',
-    live: null,
+    live: 'https://clearbox.mileshillary.com',
+  },
+  {
+    slug: 'horizon',
+    label: 'horizon.mileshillary.com',
+    live: 'https://horizon.mileshillary.com',
   },
   {
     slug: 'tax',
@@ -30,13 +35,14 @@ const SUBS = [
   },
 ]
 
-// API-compatible status mapping
-const STATUS_MAP = {
-  clearbox: { state: 'live' },
-  brain: { state: 'archived' },
-  qa: { state: 'archived' },
-  tax: { state: 'live' },
+// Default fallback status mapping (all links are live or archived)
+const DEFAULT_STATUS_MAP = {
   volc: { state: 'updating', detail: 'v1.x in App Review' },
+  clearbox: { state: 'live' },
+  horizon: { state: 'live' },
+  tax: { state: 'live' },
+  brain: { state: 'archived' },
+  qa: { state: 'live' },
 }
 
 const STATUS_CONFIGS = {
@@ -52,17 +58,44 @@ const STATUS_CONFIGS = {
     className: styles.archived,
     defaultLabel: 'archived',
   },
+  degraded: {
+    className: styles.updating,
+    defaultLabel: 'degraded',
+  },
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function LinkBuilder() {
+  const [statusMap, setStatusMap] = useState(DEFAULT_STATUS_MAP)
+
+  useEffect(() => {
+    const fetchLiveStatus = async () => {
+      try {
+        const res = await fetch('/api/status').catch(() => fetch('http://127.0.0.1:8006/status'))
+        if (res && res.ok) {
+          const data = await res.json()
+          if (data.projects) {
+            const updated = { ...DEFAULT_STATUS_MAP }
+            for (const [slug, p] of Object.entries(data.projects)) {
+              updated[slug] = { state: p.state === 'offline' ? 'archived' : p.state, detail: p.detail }
+            }
+            setStatusMap(updated)
+          }
+        }
+      } catch (e) {
+        // Fallback to default mapping silently
+      }
+    }
+    fetchLiveStatus()
+  }, [])
+
   return (
     <div className={styles.root}>
       <div className={styles.links}>
         {SUBS.map(sub => {
           const href = sub.live || `https://${sub.slug}.mileshillary.com`
-          const status = STATUS_MAP[sub.slug]
-          const statusConfig = status ? STATUS_CONFIGS[status.state] : null
+          const status = statusMap[sub.slug] || { state: 'archived' }
+          const statusConfig = STATUS_CONFIGS[status.state] || STATUS_CONFIGS.archived
 
           return (
             <a
