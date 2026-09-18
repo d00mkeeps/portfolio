@@ -40,9 +40,9 @@ const DEFAULT_STATUS_MAP = {
   volc: { state: 'updating', detail: 'v1.x in App Review' },
   clearbox: { state: 'live' },
   horizon: { state: 'live' },
-  tax: { state: 'live' },
+  tax: { state: 'archived' },
   brain: { state: 'archived' },
-  qa: { state: 'live' },
+  qa: { state: 'archived' },
 }
 
 const STATUS_CONFIGS = {
