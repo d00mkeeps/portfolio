@@ -55,3 +55,20 @@ jobs:
             IdentityFile ~/.ssh/id_deploy" > ~/.ssh/config
           ssh "$SERVER_USER@$SSH_HOSTNAME" \
               "cd /home/miles/portfolio && git fetch origin main && git reset --hard origin/main && docker compose up -d --build && sleep 2 && (curl -s --retry 3 --retry-connrefused -X POST http://127.0.0.1:8006/deploy -H 'Content-Type: application/json' -d '{\"project\": \"portfolio\", \"status\": \"success\", \"actor\": \"${{ github.actor }}\"}' || true)"
+
+      - name: Report CI Failure to Observer & Loki
+        if: failure()
+        run: |
+          curl -s -X POST https://observer.mileshillary.com/ci/failure \
+            -H "Content-Type: application/json" \
+            -d '{
+              "repository": "${{ github.repository }}",
+              "workflow": "${{ github.workflow }}",
+              "run_id": "${{ github.run_id }}",
+              "run_number": "${{ github.run_number }}",
+              "actor": "${{ github.actor }}",
+              "branch": "${{ github.ref_name }}",
+              "commit": "${{ github.sha }}",
+              "error_step": "Workflow Execution Failed",
+              "run_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }' || true
