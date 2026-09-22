@@ -90,3 +90,13 @@ src/
   styles/
     global.css    # Design tokens + reset
 ```
+
+---
+
+<!-- AUTO-DOCS-START -->
+## 📚 Living Documentation
+
+*Auto-generated on every push to `main`:*
+
+* 🏗️ **[Architecture & Topology](docs/ARCHITECTURE.md)**: Interactive Mermaid service mesh and container specifications.
+<!-- AUTO-DOCS-END -->

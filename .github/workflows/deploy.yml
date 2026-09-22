@@ -1,13 +1,34 @@
-name: Deploy Portfolio
+name: Deploy Portfolio & Auto-Docs
 
 on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Auto-Generate Documentation
+        run: |
+          python3 scripts/volcano_docgen.py --title "Miles Hillary Portfolio"
+
+      - name: Commit and Push Documentation Updates
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: auto-update API and architecture specs [skip ci]"
+          file_pattern: 'docs/* README.md'
+
       - name: Install cloudflared
         run: |
           curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
