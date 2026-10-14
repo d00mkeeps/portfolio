@@ -1,0 +1,509 @@
+{
+  "generatedAt": "2026-10-14T11:58:42.826673+00:00",
+  "registryLastUpdated": "2026-10-13T16:55:23.278636+00:00",
+  "hubs": [
+    {
+      "slug": "cano",
+      "id": "CANO",
+      "name": "CANO Infrastructure Cluster",
+      "shortName": "CANO",
+      "hub": "CANO",
+      "isHub": true,
+      "category": "Autonomous Cloud Base & Multi-Agent Workspace",
+      "status": "active",
+      "statusLabel": "AUTONOMOUS OPERATOR",
+      "monthlyCommits": 152,
+      "totalCommits": 749,
+      "loc": 246523,
+      "activeServices": 8,
+      "currentFocus": "Autonomous fleet orchestration, self-healing telemetry hooks, and unified microservice proxy mesh.",
+      "nextMilestone": "Zero-downtime automated Canary deploys & cross-edge synchronization with Local.",
+      "host": "Oracle Cloud (OCI Ampere A1, 4 OCPU, 24GB RAM)",
+      "summary": "CANO is the central 24/7 cloud command base on Oracle Cloud. It acts as the persistent nervous system for all projects: running production microservices, executing continuous background ingestion, managing vector stores, and coordinating autonomous AI agents with self-healing telemetry.",
+      "sectors": [
+        {
+          "name": "Microservices & APIs",
+          "pct": 40,
+          "color": "#eab308"
+        },
+        {
+          "name": "Agent Telemetry & SRE",
+          "pct": 25,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "Databases & Embeddings",
+          "pct": 20,
+          "color": "#a855f7"
+        },
+        {
+          "name": "Tunnels & Ingress Mesh",
+          "pct": 15,
+          "color": "#22c55e"
+        }
+      ],
+      "services": [
+        "observer",
+        "horizon",
+        "volc",
+        "portfolio",
+        "clearbox",
+        "airwave",
+        "sturdy-robot",
+        "now-harvester"
+      ],
+      "githubUrl": "https://github.com/d00mkeeps"
+    },
+    {
+      "slug": "local",
+      "id": "Local",
+      "name": "Local Edge Station",
+      "shortName": "LOCAL",
+      "hub": "Local",
+      "isHub": true,
+      "category": "MacBook Pro Workstation & Edge LLM Runtime",
+      "status": "active",
+      "statusLabel": "LOCAL RUNTIME",
+      "monthlyCommits": 16,
+      "totalCommits": 38,
+      "loc": 6840,
+      "activeServices": 1,
+      "currentFocus": "Running local LLM pipelines and offline-first tools for the Spanish Tutor.",
+      "nextMilestone": "Continuous bidirectional telemetry sync with CANO Observer.",
+      "host": "MacBook Pro (Apple Silicon)",
+      "summary": "The Local node represents development and edge pipelines running directly on Miles's physical workstation, reserved for intensive local models and client applications not hosted on cloud VMs.",
+      "sectors": [
+        {
+          "name": "Spanish Tutor Engine",
+          "pct": 65,
+          "color": "#f8fafc"
+        },
+        {
+          "name": "Local LLM Inference",
+          "pct": 25,
+          "color": "#94a3b8"
+        },
+        {
+          "name": "Sync Daemon",
+          "pct": 10,
+          "color": "#475569"
+        }
+      ],
+      "services": [
+        "spanish-tutor"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "slug": "observer",
+      "name": "Observer SRE & Ops",
+      "category": "SRE / Ops",
+      "hub": "CANO",
+      "status": "active",
+      "statusReason": "Active fleet monitoring and telemetry",
+      "currentFocus": "Cano fleet monitoring, automated incident response, central project registry tracking",
+      "nextMilestone": "Automated daily ops digest and registry status sync to portfolio/dashboards",
+      "parkedUntil": null,
+      "loc": 8515,
+      "monthlyCommits": 63,
+      "totalCommits": 64,
+      "sectors": [
+        {
+          "name": "Telemetry (Prometheus / Loki)",
+          "pct": 45,
+          "color": "#a855f7"
+        },
+        {
+          "name": "SRE Operator & cano-pm CLI",
+          "pct": 35,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "Incident Watchdog & Inbox",
+          "pct": 20,
+          "color": "#22c55e"
+        }
+      ],
+      "containers": [
+        "obs-operator",
+        "obs-prometheus",
+        "obs-loki"
+      ],
+      "notes": [
+        "Central SRE operator API on port 8006 (/projects endpoints)",
+        "Global cano-pm CLI installed at /usr/local/bin/cano-pm for fleet-wide lifecycle tracking",
+        "Decoupled mobile preview daemon from Telegram; transferred @Airwavbot token to Airwave platform",
+        "Prometheus and Loki telemetry running across Cano host"
+      ],
+      "liveUrl": null,
+      "appStoreUrl": null,
+      "githubUrl": null,
+      "host": "oracle-cloud"
+    },
+    {
+      "slug": "horizon",
+      "name": "Horizon Paper Tracker",
+      "category": "Trading / Bot",
+      "hub": "CANO",
+      "status": "active",
+      "statusReason": "Active 15-second tick ingestion and quant calibration",
+      "currentFocus": "15-second tick accumulation across active holdings and DexScreener candidates",
+      "nextMilestone": "Quant refactor: run selectivity experiments and ATR dynamic barriers over 7-day tick fixture",
+      "parkedUntil": "2026-10-18",
+      "loc": 27254,
+      "monthlyCommits": 33,
+      "totalCommits": 50,
+      "sectors": [
+        {
+          "name": "Quant Backtester & Algo",
+          "pct": 55,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "Operator UI (React / Vite)",
+          "pct": 25,
+          "color": "#f59e0b"
+        },
+        {
+          "name": "15s Tick Store (Postgres)",
+          "pct": 20,
+          "color": "#a855f7"
+        }
+      ],
+      "containers": [
+        "paper_frontend_ui",
+        "solana_paper_tracker",
+        "paper_postgres_db"
+      ],
+      "notes": [
+        "Decoupled strategy definitions into declarative JSON schemas (strategies/*.json)",
+        "Built standalone pure-Python backtesting CLI: python -m src.cli.backtest",
+        "Implemented dynamic volume shock screening, ATR entry sizing, and meta-label scoring gate",
+        "15-second tick recorder deployed to prod and recording into public.token_ticks",
+        "7-day tick fixture exporter CLI operational: python -m src.cli.export_ticks --days 7",
+        "Operator dashboard password updated to grapefruit; 70/70 unit tests passing cleanly"
+      ],
+      "liveUrl": "https://horizon.mileshillary.com",
+      "appStoreUrl": null,
+      "githubUrl": "https://github.com/d00mkeeps/horizon",
+      "host": "oracle-cloud"
+    },
+    {
+      "slug": "volc",
+      "name": "Volc AI Gym Coach",
+      "category": "iOS / AI",
+      "hub": "CANO",
+      "status": "active",
+      "statusReason": "Active development & iOS Dev Client testing",
+      "currentFocus": "Configured volc-api.mileshillary.com gateway and verified dev authentication",
+      "nextMilestone": "Unpause Supabase & verify mobile login",
+      "parkedUntil": null,
+      "loc": 118094,
+      "monthlyCommits": 26,
+      "totalCommits": 328,
+      "sectors": [
+        {
+          "name": "Client (Expo SDK 54 / iOS)",
+          "pct": 52,
+          "color": "#f59e0b"
+        },
+        {
+          "name": "Engine (FastAPI / PyTorch)",
+          "pct": 32,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "Persistence (Supabase / PG)",
+          "pct": 16,
+          "color": "#a855f7"
+        }
+      ],
+      "containers": [
+        "volc-website",
+        "supreme-octo-doodle-api",
+        "volc-backend-dev"
+      ],
+      "notes": [
+        "Mobile Dev Preview daemon running on port 8007 with ephemeral Cloudflare Quick Tunnel",
+        "Armed with 60-minute inactivity watchdog that auto-spins down after 1h idle (resets on active connections/pings)",
+        "Public Safari trampoline page live at https://volc.mileshillary.com/preview",
+        "EAS dev build installed on physical iPhone via Safari",
+        "Saved dev credentials and auto-login integrated into SignUpForm.tsx with DEV_CONFIG fallback",
+        "Quick Log Notes / WorkoutScratchpadSheet and staging review routes in progress",
+        "Built keep-alive probe, admin telemetry endpoints, and 4h cron"
+      ],
+      "liveUrl": "https://volc.mileshillary.com",
+      "appStoreUrl": "https://apps.apple.com/gb/app/volc-ai-gym-coach/id6751469055",
+      "githubUrl": "https://github.com/d00mkeeps/volc",
+      "host": "oracle-cloud"
+    },
+    {
+      "slug": "portfolio",
+      "name": "Miles Portfolio",
+      "category": "Web App",
+      "hub": "CANO",
+      "status": "active",
+      "statusReason": "Production operational",
+      "currentFocus": "Personal portfolio and project showcase web app",
+      "nextMilestone": "Live status widget integration pulling dynamic data from Cano project registry",
+      "parkedUntil": null,
+      "loc": 28147,
+      "monthlyCommits": 12,
+      "totalCommits": 58,
+      "sectors": [
+        {
+          "name": "Orbital Map & Home UI",
+          "pct": 55,
+          "color": "#f59e0b"
+        },
+        {
+          "name": "Operator Proxy & Sync Pipeline",
+          "pct": 25,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "MDX Technical Articles",
+          "pct": 20,
+          "color": "#a855f7"
+        }
+      ],
+      "containers": [
+        "miles-portfolio"
+      ],
+      "notes": [
+        "Cleaned up mileshillary.com: removed archived indicators and legend",
+        "Added accurate one-line project descriptions for active Cano services (Volc, Clearbox, Horizon)",
+        "Vite React portfolio deployed behind Nginx on port 3002 with internal DNS resolver"
+      ],
+      "liveUrl": "https://mileshillary.com",
+      "appStoreUrl": null,
+      "githubUrl": "https://github.com/d00mkeeps/portfolio",
+      "host": "oracle-cloud"
+    },
+    {
+      "slug": "clearbox",
+      "name": "Clearbox Medicine API",
+      "category": "API / RAG",
+      "hub": "CANO",
+      "status": "active",
+      "statusReason": "Production operational",
+      "currentFocus": "Biomedical knowledge retrieval and pgvector embeddings engine",
+      "nextMilestone": "Vector search latency optimization and public documentation",
+      "parkedUntil": null,
+      "loc": 40435,
+      "monthlyCommits": 11,
+      "totalCommits": 189,
+      "sectors": [
+        {
+          "name": "Medicine API & pgvector",
+          "pct": 45,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "Portal Frontend (React)",
+          "pct": 35,
+          "color": "#f59e0b"
+        },
+        {
+          "name": "NHS Database (dmd_ampp)",
+          "pct": 20,
+          "color": "#a855f7"
+        }
+      ],
+      "containers": [
+        "clearbox-site",
+        "medicine-api",
+        "cb_postgres_db"
+      ],
+      "notes": [
+        "Medicine API configured to default to hosted backend (clearbox-api.mileshillary.com)",
+        "Self-hosted PostgreSQL (pgvector on 5433), PostgREST, Meta, Studio, and Gateway operational",
+        "Adherence analytics aggregator joined against dmd_ampp database"
+      ],
+      "liveUrl": "https://clearbox.mileshillary.com",
+      "appStoreUrl": null,
+      "githubUrl": "https://github.com/d00mkeeps/clear-box",
+      "host": "oracle-cloud"
+    },
+    {
+      "slug": "airwave",
+      "name": "Airwave Music Ingestion",
+      "category": "Music / Telegram",
+      "hub": "CANO",
+      "status": "active",
+      "statusReason": "Repurposed @Airwavbot as dedicated autonomous music acquisition and library agent",
+      "currentFocus": "Autonomous music acquisition and streaming via Soulseek/slskd, Navidrome & yt-dlp on @Airwavbot",
+      "nextMilestone": "Master library rsync from local MBP to /home/ubuntu/music, client setup, and dig validation",
+      "parkedUntil": null,
+      "loc": 2417,
+      "monthlyCommits": 3,
+      "totalCommits": 3,
+      "sectors": [
+        {
+          "name": "P2P Engine (slskd / yt-dlp)",
+          "pct": 50,
+          "color": "#22c55e"
+        },
+        {
+          "name": "Streaming Core (Navidrome)",
+          "pct": 30,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "Agent Interface (@Airwavbot)",
+          "pct": 20,
+          "color": "#f59e0b"
+        }
+      ],
+      "containers": [
+        "airwave",
+        "navidrome",
+        "slskd"
+      ],
+      "notes": [
+        "Replaces legacy DevOps bot on @Airwavbot token",
+        "Stack: slskd (5030), Navidrome (4533), yt-dlp, Mutagen tagging, Gemini intent extraction",
+        "Soulseek P2P engine with 60-minute automatic fallback to SoundCloud/YouTube",
+        "Navidrome library bind-mounted directly to host /home/ubuntu/music for direct rsync from local MBP",
+        "Automated library scan CLI installed globally at /usr/local/bin/airwave-scan and via /scan Telegram command",
+        "Port 4533 enabled in host iptables; Subsonic API active with credentials airwave:airwave_navidrome_pass_2026"
+      ],
+      "liveUrl": null,
+      "appStoreUrl": null,
+      "githubUrl": null,
+      "host": "oracle-cloud"
+    },
+    {
+      "slug": "sturdy-robot",
+      "name": "Crucible QA",
+      "category": "DevOps / QA",
+      "hub": "CANO",
+      "status": "active",
+      "statusReason": "Production operational",
+      "currentFocus": "Crucible QA platform and feat-to-spec pipeline",
+      "nextMilestone": "Autonomous E2E regression automation",
+      "parkedUntil": null,
+      "loc": 18403,
+      "monthlyCommits": 2,
+      "totalCommits": 55,
+      "sectors": [
+        {
+          "name": "Crucible QA Runner",
+          "pct": 45,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "Feat-to-spec Pipeline",
+          "pct": 35,
+          "color": "#22c55e"
+        },
+        {
+          "name": "Web Dashboard (React)",
+          "pct": 20,
+          "color": "#f59e0b"
+        }
+      ],
+      "containers": [
+        "crucible-web",
+        "crucible-api",
+        "feat-to-spec"
+      ],
+      "notes": [
+        "Provides QA test harness and automated spec generation on port 3000 (qa.mileshillary.com)",
+        "Cloudflared tunnel upgraded to HTTP/2",
+        "Living documentation snapshot synced"
+      ],
+      "liveUrl": "https://qa.mileshillary.com",
+      "appStoreUrl": null,
+      "githubUrl": "https://github.com/d00mkeeps/sturdy-robot",
+      "host": "oracle-cloud"
+    },
+    {
+      "slug": "now-harvester",
+      "name": "NTU NOW Harvester & RAG",
+      "category": "Ingestion / RAG",
+      "hub": "CANO",
+      "status": "active",
+      "statusReason": "Building autonomous D2L Brightspace content harvester and hybrid search store",
+      "currentFocus": "Hosting web & API search server on Cano port 8015 with public Cloudflare tunnel",
+      "nextMilestone": "Continuous automated daily sync and living documentation",
+      "parkedUntil": null,
+      "loc": 3258,
+      "monthlyCommits": 2,
+      "totalCommits": 2,
+      "sectors": [
+        {
+          "name": "Brightspace Valence Harvester",
+          "pct": 40,
+          "color": "#22c55e"
+        },
+        {
+          "name": "Docling & Qdrant RAG Engine",
+          "pct": 40,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "Hybrid FTS5 Search CLI",
+          "pct": 20,
+          "color": "#a855f7"
+        }
+      ],
+      "containers": [],
+      "notes": [
+        "Valence REST API synchronization with session cookie extraction",
+        "Local SQLite FTS5 + embedded Qdrant vector store",
+        "Docling document conversion & BAAI/bge-small-en-v1.5 embeddings",
+        "Completed and verified full pipeline: auth.py, harvester.py, ingest.py, query.py, db.py, sync.py with 100% test pass",
+        "Restricted sync to 4 final year modules, added Firefox cookies.sqlite extractor, purged non-target modules",
+        "Added Rule 6 to AGENTS.md, created ntu-course-intel skill",
+        "Hosted web UI & REST API on port 8015, enabled 24/7 systemd service now-course-intel.service with public Cloudflare tunnel",
+        "Ingestion 100% complete across all 4 degree modules (696,653 words, 3,142 chunks, 269 documents). Service running 24/7 on Cano port 8015."
+      ],
+      "liveUrl": null,
+      "appStoreUrl": null,
+      "githubUrl": null,
+      "host": "oracle-cloud"
+    },
+    {
+      "slug": "spanish-tutor",
+      "name": "Spanish AI Tutor",
+      "category": "AI / Audio",
+      "hub": "Local",
+      "status": "active",
+      "statusReason": "Local edge speech-to-speech AI language companion",
+      "currentFocus": "Real-time Whisper speech feedback & interactive grammar drills",
+      "nextMilestone": "Edge voice pipeline latency under 200ms",
+      "parkedUntil": null,
+      "loc": 6840,
+      "monthlyCommits": 16,
+      "totalCommits": 38,
+      "sectors": [
+        {
+          "name": "Speech Recognition (Whisper.cpp)",
+          "pct": 45,
+          "color": "#38bdf8"
+        },
+        {
+          "name": "Interactive Grammar Engine (LLM)",
+          "pct": 35,
+          "color": "#22c55e"
+        },
+        {
+          "name": "Audio Synthesis & Local UI",
+          "pct": 20,
+          "color": "#f59e0b"
+        }
+      ],
+      "containers": [],
+      "notes": [
+        "Running locally on Apple Silicon (Whisper.cpp / CoreML)",
+        "Interactive grammar correction and spaced repetition vocabulary engine"
+      ],
+      "liveUrl": null,
+      "appStoreUrl": null,
+      "githubUrl": null,
+      "host": "local-macbook"
+    }
+  ]
+}

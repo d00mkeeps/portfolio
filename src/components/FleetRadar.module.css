@@ -1,0 +1,709 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  margin: 1.5rem 0 3.5rem;
+  font-family: var(--font-mono);
+}
+
+/* ─── Control Bar ─────────────────────────────────────────────────────────── */
+.controlBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.systemTag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+.tagSep {
+  color: var(--text-dim);
+}
+
+.tagMuted {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+}
+
+.viewToggle {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.toggleBtn {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  padding: 0.25rem 0.5rem;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+}
+
+.toggleBtn:hover {
+  color: var(--text-muted);
+}
+
+.toggleBtnActive {
+  color: var(--accent);
+}
+
+/* ─── Orbit Viewport ──────────────────────────────────────────────────────── */
+.orbitViewport {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  background: #060606;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.7);
+}
+
+.orbitCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hudTopLeft {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.06em;
+  pointer-events: none;
+}
+
+.hudTopRight {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.85rem;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.06em;
+  pointer-events: none;
+}
+
+/* ─── List View ───────────────────────────────────────────────────────────── */
+.listView {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
+
+.listItem:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.listItemSelected {
+  background: rgba(0, 255, 157, 0.04);
+  border-left: 3px solid #00ff9d;
+}
+
+.listLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.listSlug {
+  font-weight: 500;
+  color: var(--text);
+  font-size: 0.82rem;
+}
+
+.listName {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.listCategory {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius);
+}
+
+.listRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.listHub {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* ─── Inspector Docking HUD ───────────────────────────────────────────────── */
+.inspectorCard {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.inspectorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.inspectorMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.projectHubTag {
+  font-size: 0.62rem;
+  color: #00ff9d;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.projectName {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.projectCategory {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.statusWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius);
+  border: 1px solid;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.statusActive {
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.statusActive .statusDot {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+.statusParked {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.statusParked .statusDot {
+  background: #f59e0b;
+  box-shadow: 0 0 6px #f59e0b;
+}
+
+.activityBadge {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius);
+}
+
+/* ─── Sector Continents Breakdown ─────────────────────────────────────────── */
+.sectorSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.sectorBar {
+  display: flex;
+  height: 6px;
+  width: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--border);
+}
+
+.sectorSegment {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.sectorLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.legendDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+}
+
+.legendLabel {
+  color: var(--text-muted);
+}
+
+.legendPct {
+  color: var(--text);
+  font-size: 0.65rem;
+  opacity: 0.75;
+}
+
+/* ─── Telemetry Grid ──────────────────────────────────────────────────────── */
+.telemetryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.telemetryBox {
+  background: var(--bg);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.telemetryLabel {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+.telemetryValue {
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ─── Inspector Footer ────────────────────────────────────────────────────── */
+.inspectorFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 0.25rem;
+}
+
+.actionLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.actionBtnPrimary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.85rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.actionBtnPrimary:hover {
+  opacity: 0.85;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border-bright);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pagerNav {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.pagerBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.pagerBtn:hover {
+  border-color: var(--border-bright);
+  color: var(--text);
+}
+
+.pagerCount {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  min-width: 45px;
+  text-align: center;
+}
+
+/* ─── Mobile Responsiveness ───────────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .orbitViewport {
+    height: 320px;
+  }
+
+  .telemetryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .inspectorHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .statusWrap {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .inspectorFooter {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+
+  .actionLinks {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .actionBtn, .actionBtnPrimary {
+    width: 100%;
+    justify-content: center;
+    min-height: 40px;
+  }
+
+  .pagerNav {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .pagerBtn {
+    width: 44px;
+    height: 40px;
+  }
+
+  .controlBar {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* ─── Hub & Fleet Quick Selector ──────────────────────────────────────────── */
+.quickBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  white-space: nowrap;
+  font-size: 0.7rem;
+}
+
+.quickBarLabel {
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.quickBarSep {
+  color: var(--border-bright);
+  padding: 0 0.25rem;
+  opacity: 0.5;
+}
+
+.nodeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.nodeBtn:hover {
+  border-color: var(--border-bright);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.nodeBtnCanoSelected {
+  border-color: #eab308;
+  color: #fef08a;
+  background: rgba(234, 179, 8, 0.1);
+  box-shadow: 0 0 8px rgba(234, 179, 8, 0.2);
+}
+
+.nodeBtnLocalSelected {
+  border-color: #cbd5e1;
+  color: #ffffff;
+  background: rgba(226, 232, 240, 0.1);
+  box-shadow: 0 0 8px rgba(226, 232, 240, 0.2);
+}
+
+.nodeDotGold {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #eab308;
+  box-shadow: 0 0 4px #eab308;
+}
+
+.nodeDotSilver {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  box-shadow: 0 0 4px #cbd5e1;
+}
+
+.planetPillsScroll {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.planetPill {
+  padding: 0.2rem 0.45rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.planetPill:hover {
+  color: var(--text);
+  border-color: var(--border-bright);
+}
+
+.planetPillActive {
+  border-color: #00ff9d;
+  color: #00ff9d;
+  background: rgba(0, 255, 157, 0.08);
+}
+
+/* ─── Hub Explainer Section ───────────────────────────────────────────────── */
+.hubExplainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.15rem;
+  background: rgba(234, 179, 8, 0.03);
+  border: 1px solid rgba(234, 179, 8, 0.2);
+  border-radius: var(--radius);
+}
+
+.hubExplainerLocal {
+  background: rgba(226, 232, 240, 0.03);
+  border-color: rgba(226, 232, 240, 0.2);
+}
+
+.explainerHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.explainerBadge {
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.explainerBadgeLocal {
+  background: rgba(226, 232, 240, 0.12);
+  color: #cbd5e1;
+  border-color: rgba(226, 232, 240, 0.25);
+}
+
+.explainerTitle {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+.explainerBody {
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.infraSpecsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.specItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.specLabel {
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+.specValue {
+  font-size: 0.75rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ─── Hosted Fleet Services in Hub Card ───────────────────────────────────── */
+.servicesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.servicesLabel {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+.servicesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.servicePillBtn {
+  padding: 0.25rem 0.55rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.servicePillBtn:hover {
+  border-color: #00ff9d;
+  color: #00ff9d;
+  background: rgba(0, 255, 157, 0.04);
+}

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "generate-data": "python3 scripts/generate_fleet_data.py",
     "build": "vite build",
     "preview": "vite preview"
   },

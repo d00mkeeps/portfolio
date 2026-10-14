@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import Nav from '../components/Nav.jsx'
-import LinkBuilder from '../components/LinkBuilder.jsx'
+import FleetRadar from '../components/FleetRadar.jsx'
 import styles from './Home.module.css'
 
 export default function Home() {
@@ -31,7 +30,8 @@ export default function Home() {
             </a>
           </section>
 
-          <LinkBuilder />
+          {/* ── Autonomous Fleet & Systems Radar ── */}
+          <FleetRadar />
 
         </div>
       </main>
