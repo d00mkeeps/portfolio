@@ -14,8 +14,11 @@
             accBlack: '#111111',
             accPurple: '#A100FF',
             accPurpleLight: '#F6E8FF',
-            accGrey: '#F4F4F6',
+            accGrey: '#F6F6F8',
             accEmerald: '#10B981',
+            accEmeraldLight: '#ECFDF5',
+            accRose: '#F43F5E',
+            accRoseLight: '#FFF1F2',
           },
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
@@ -45,15 +48,17 @@
         margin: 0 !important;
         width: 210mm !important;
         height: 297mm !important;
+        max-height: 297mm !important;
       }
     }
     body {
-      background-color: #27272A;
+      background-color: #1E1E24;
       font-family: 'Inter', sans-serif;
     }
     .a4-canvas {
       width: 210mm;
       height: 297mm;
+      max-height: 297mm;
       margin: 1.5rem auto;
       background: #FFFFFF;
       box-sizing: border-box;
@@ -61,7 +66,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
   </style>
 </head>
@@ -71,7 +76,7 @@
   <div class="no-print fixed top-4 right-4 z-50 flex items-center gap-3 bg-accBlack text-white px-4 py-2.5 rounded-lg shadow-xl border border-zinc-700 text-xs">
     <span class="flex items-center gap-1.5">
       <span class="w-2 h-2 rounded-full bg-accEmerald animate-pulse"></span>
-      <strong>Verified Word Count:</strong> 358 Words (Target: 300–380)
+      <strong>Word Count:</strong> 368 Words (Target: 300–380)
     </span>
     <button onclick="window.print()" class="bg-accPurple hover:bg-purple-700 text-white font-bold px-3 py-1.5 rounded transition cursor-pointer">
       Export to A4 PDF
@@ -79,310 +84,201 @@
   </div>
 
   <!-- A4 Printable Canvas (210mm x 297mm) -->
-  <main class="a4-canvas p-6">
+  <main class="a4-canvas p-6 flex flex-col justify-between">
 
-    <!-- HEADER BANNER -->
-    <header class="bg-accBlack text-white p-5 rounded-xl border-b-4 border-accPurple relative overflow-hidden shrink-0">
-      <div class="absolute -right-8 -top-8 w-36 h-36 bg-accPurple opacity-20 rounded-full blur-2xl"></div>
-      <div class="flex justify-between items-center mb-1.5">
-        <div class="flex items-center gap-2">
-          <span class="text-accPurple font-black text-xl leading-none">&gt;</span>
-          <span class="text-[11px] font-extrabold tracking-widest uppercase text-white">
-            ACCENTURE PLC <span class="text-zinc-400 font-normal">| Strategic Audit &amp; Market Analysis</span>
+    <!-- TOP CONTAINER (Header + Metrics) -->
+    <div class="space-y-3 shrink-0">
+
+      <!-- HEADER BANNER -->
+      <header class="bg-accBlack text-white p-4.5 rounded-xl border-b-4 border-accPurple relative overflow-hidden">
+        <div class="absolute -right-8 -top-8 w-36 h-36 bg-accPurple opacity-20 rounded-full blur-2xl"></div>
+        <div class="flex justify-between items-center mb-1">
+          <div class="flex items-center gap-2">
+            <span class="text-accPurple font-black text-xl leading-none">&gt;</span>
+            <span class="text-[11px] font-extrabold tracking-widest uppercase text-white">
+              ACCENTURE PLC <span class="text-zinc-400 font-normal">| Strategic Audit &amp; Market Analysis</span>
+            </span>
+          </div>
+          <span class="text-[10px] font-semibold bg-zinc-800 text-zinc-300 px-2.5 py-0.5 rounded border border-zinc-700">
+            Formative Audit | Strategic Marketing Consultancy Report (MKTG32820)
           </span>
         </div>
-        <span class="text-[10px] font-semibold bg-zinc-800 text-zinc-300 px-2.5 py-1 rounded border border-zinc-700">
-          Formative Audit | Strategic Marketing Consultancy Report (MKTG32820)
-        </span>
+        <h1 class="text-[19px] font-extrabold tracking-tight leading-snug text-white">
+          Decoupling Revenue from Headcount: <span class="text-accPurple">Can Accenture Survive Generative AI?</span>
+        </h1>
+      </header>
+
+      <!-- 3 TOP METRIC CARDS (Context at a Glance) -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-accGrey p-3 rounded-lg border-l-4 border-accRose flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-accRose/15 text-accRose flex items-center justify-center font-black text-sm shrink-0">
+            👥
+          </div>
+          <div>
+            <div class="text-[13.5px] font-black text-accBlack leading-none mb-0.5">779k Workforce</div>
+            <div class="text-[9.5px] text-zinc-600 leading-tight">World's largest IT delivery army—now exposed to automation risk.</div>
+          </div>
+        </div>
+
+        <div class="bg-accGrey p-3 rounded-lg border-l-4 border-accBlack flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-accBlack/15 text-accBlack flex items-center justify-center font-black text-sm shrink-0">
+            ⏱️
+          </div>
+          <div>
+            <div class="text-[13.5px] font-black text-accBlack leading-none mb-0.5">$69.7B Revenue</div>
+            <div class="text-[9.5px] text-zinc-600 leading-tight">Historically tied to billing clients by the hour (T&amp;M).</div>
+          </div>
+        </div>
+
+        <div class="bg-accGrey p-3 rounded-lg border-l-4 border-accEmerald flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-accEmerald/15 text-accEmerald flex items-center justify-center font-black text-sm shrink-0">
+            ⚡
+          </div>
+          <div>
+            <div class="text-[13.5px] font-black text-accBlack leading-none mb-0.5">$5.9B Bookings</div>
+            <div class="text-[9.5px] text-zinc-600 leading-tight">Rapid pivot toward proprietary enterprise AI platforms (FY25).</div>
+          </div>
+        </div>
       </div>
-      <h1 class="text-[18.5px] font-extrabold tracking-tight leading-snug text-white">
-        Decoupling Value from Headcount: <span class="text-accPurple">Navigating the Generative AI Paradigm Shift</span>
-      </h1>
-    </header>
 
-    <!-- ROW 1: PANEL 1 (PESTEL) & PANEL 2 (CPM) -->
-    <div class="grid grid-cols-12 gap-4 shrink-0">
-
-      <!-- PANEL 1: EXTERNAL MACRO DRIVERS -->
-      <section class="col-span-6 bg-accGrey p-4 rounded-xl border border-zinc-200 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between border-b border-zinc-300 pb-2 mb-3">
-            <h2 class="text-xs font-extrabold uppercase tracking-wider text-accBlack flex items-center gap-1.5">
-              <span class="w-2 h-3.5 bg-accPurple inline-block rounded-sm"></span>
-              01. External Macro Drivers
-            </h2>
-            <span class="text-[9px] font-bold text-accPurple bg-accPurpleLight px-2 py-0.5 rounded uppercase">
-              PESTEL &amp; Porter (2008)
-            </span>
-          </div>
-
-          <ul class="space-y-2.5 text-[10.8px] leading-relaxed text-zinc-800">
-            <li class="bg-white p-2.5 rounded-lg border-l-4 border-accPurple shadow-sm">
-              <strong class="text-accBlack block text-[11px]">Technological Shock (GenAI Commoditisation):</strong>
-              Autonomous agents automate legacy coding and BPO contracts, compressing time-and-materials (T&amp;M) billable margins (Gartner, 2025).
-            </li>
-            <li class="bg-white p-2.5 rounded-lg border-l-4 border-accBlack shadow-sm">
-              <strong class="text-accBlack block text-[11px]">Macroeconomic Scrutiny &amp; ROI Compression:</strong>
-              Enterprise IT discretionary budgets remain constrained; C-suite buyers demand self-funding transformation and accelerated ROI (Foy &amp; O'Dwyer, 2024).
-            </li>
-            <li class="bg-white p-2.5 rounded-lg border-l-4 border-accEmerald shadow-sm">
-              <strong class="text-accBlack block text-[11px]">Hyperscaler Bargaining Power:</strong>
-              Over 60% of Accenture's $69.7B FY25 revenue depends on top-10 ecosystem partners (Microsoft, AWS, Google), elevating supplier power and disintermediation risk (Accenture, 2025; IDC, 2024; Porter, 2008).
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- PANEL 2: COMPETITIVE PROFILE MATRIX (CPM SNAPSHOT) -->
-      <section class="col-span-6 bg-accGrey p-4 rounded-xl border border-zinc-200 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between border-b border-zinc-300 pb-2 mb-3">
-            <h2 class="text-xs font-extrabold uppercase tracking-wider text-accBlack flex items-center gap-1.5">
-              <span class="w-2 h-3.5 bg-accPurple inline-block rounded-sm"></span>
-              02. Competitive Profile Matrix
-            </h2>
-            <span class="text-[9px] font-bold text-zinc-600 bg-white border border-zinc-300 px-2 py-0.5 rounded uppercase">
-              David et al. (2020)
-            </span>
-          </div>
-
-          <div class="overflow-hidden rounded-lg border border-zinc-300 bg-white shadow-sm">
-            <table class="w-full text-left border-collapse text-[10.5px]">
-              <thead>
-                <tr class="bg-accBlack text-white text-[9.5px] uppercase tracking-wider">
-                  <th class="py-2 px-2.5">Critical Success Factor</th>
-                  <th class="py-2 px-1.5 text-center">Wt.</th>
-                  <th class="py-2 px-2 text-center bg-accPurple font-extrabold">ACN</th>
-                  <th class="py-2 px-1.5 text-center text-zinc-300">Deloitte</th>
-                  <th class="py-2 px-1.5 text-center text-zinc-300">MBB</th>
-                  <th class="py-2 px-1.5 text-center text-zinc-300">TCS/Infy</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-zinc-200 text-zinc-800">
-                <tr>
-                  <td class="py-1.5 px-2.5 font-medium">GenAI &amp; Cloud Ecosystem</td>
-                  <td class="py-1.5 px-1.5 text-center text-zinc-500">0.30</td>
-                  <td class="py-1.5 px-2 text-center font-bold bg-accPurpleLight/50 text-accBlack">9.0</td>
-                  <td class="py-1.5 px-1.5 text-center">8.5</td>
-                  <td class="py-1.5 px-1.5 text-center">7.5</td>
-                  <td class="py-1.5 px-1.5 text-center">7.5</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 px-2.5 font-medium">C-Suite Advisory Brand Equity</td>
-                  <td class="py-1.5 px-1.5 text-center text-zinc-500">0.25</td>
-                  <td class="py-1.5 px-2 text-center font-bold bg-accPurpleLight/50 text-accBlack">8.0</td>
-                  <td class="py-1.5 px-1.5 text-center">8.5</td>
-                  <td class="py-1.5 px-1.5 text-center font-semibold">9.5</td>
-                  <td class="py-1.5 px-1.5 text-center">6.0</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 px-2.5 font-medium">Global Delivery Scale &amp; Cost</td>
-                  <td class="py-1.5 px-1.5 text-center text-zinc-500">0.25</td>
-                  <td class="py-1.5 px-2 text-center font-bold bg-accPurpleLight/50 text-accBlack">8.5</td>
-                  <td class="py-1.5 px-1.5 text-center">7.5</td>
-                  <td class="py-1.5 px-1.5 text-center">6.5</td>
-                  <td class="py-1.5 px-1.5 text-center font-semibold">9.0</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 px-2.5 font-medium">Proprietary IP Platforms</td>
-                  <td class="py-1.5 px-1.5 text-center text-zinc-500">0.20</td>
-                  <td class="py-1.5 px-2 text-center font-bold bg-accPurpleLight/50 text-accBlack">8.0</td>
-                  <td class="py-1.5 px-1.5 text-center">7.8</td>
-                  <td class="py-1.5 px-1.5 text-center">8.2</td>
-                  <td class="py-1.5 px-1.5 text-center">7.0</td>
-                </tr>
-                <tr class="bg-zinc-100 font-extrabold text-[11px] border-t-2 border-accBlack">
-                  <td class="py-2 px-2.5 text-accBlack">Total Weighted Score</td>
-                  <td class="py-2 px-1.5 text-center">1.00</td>
-                  <td class="py-2 px-2 text-center bg-accEmerald text-white">8.4</td>
-                  <td class="py-2 px-1.5 text-center text-accBlack">8.1</td>
-                  <td class="py-2 px-1.5 text-center text-accBlack">7.9</td>
-                  <td class="py-2 px-1.5 text-center text-accBlack">7.4</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="mt-2.5 bg-accBlack text-white p-2.5 rounded-lg text-[10.3px] leading-snug border-l-4 border-accEmerald">
-          <span class="text-accEmerald font-bold uppercase tracking-wider text-[9px] block mb-0.5">Strategic Positioning Callout:</span>
-          Accenture bridges the strategic chasm by uniting end-to-end execution scale that McKinsey/BCG lack with boardroom transformation credibility that offshore rivals (TCS/Infosys) cannot replicate.
-        </div>
-      </section>
     </div>
 
-    <!-- PANEL 3: INTERNAL CAPABILITIES AUDIT (VRIO FRAMEWORK) -->
-    <section class="bg-accGrey p-4 rounded-xl border border-zinc-200 shrink-0">
-      <div class="flex items-center justify-between border-b border-zinc-300 pb-2 mb-2.5">
-        <h2 class="text-xs font-extrabold uppercase tracking-wider text-accBlack flex items-center gap-1.5">
-          <span class="w-2 h-3.5 bg-accPurple inline-block rounded-sm"></span>
-          03. Internal Capabilities Audit — Resource-Based View (VRIO Framework)
-        </h2>
+    <!-- CORE STRATEGIC PILLAR 1: THE PROBLEM (HEADCOUNT TRAP) -->
+    <section class="bg-accGrey p-4.5 rounded-xl border-l-4 border-accPurple shadow-sm shrink-0">
+      <div class="flex items-center justify-between border-b border-zinc-200 pb-2 mb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-md bg-accPurple text-white font-extrabold text-xs flex items-center justify-center">01</span>
+          <h2 class="text-xs font-black uppercase tracking-wider text-accBlack">
+            The Headcount Trap: Why AI Breaks the Hourly Billing Model
+          </h2>
+        </div>
         <span class="text-[9px] font-bold text-accPurple bg-accPurpleLight px-2 py-0.5 rounded uppercase">
-          Barney (1991) • Accenture 10-K (2025)
+          PESTEL &amp; Porter (2008)
         </span>
       </div>
 
-      <div class="overflow-hidden rounded-lg border border-zinc-300 bg-white shadow-sm">
-        <table class="w-full text-left border-collapse text-[10.5px]">
-          <thead>
-            <tr class="bg-accBlack text-white text-[9.5px] uppercase tracking-wider">
-              <th class="py-2 px-3 w-[29%]">Core Strategic Resource</th>
-              <th class="py-2 px-2 text-center w-[15%]">V - R - I - O</th>
-              <th class="py-2 px-3 w-[23%]">Competitive Implication</th>
-              <th class="py-2 px-3 w-[33%]">Empirical &amp; Theoretical Evaluation</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-zinc-200 text-zinc-800">
-            <tr>
-              <td class="py-2 px-3 font-bold text-accBlack">1. Global C-Suite Client Relationships</td>
-              <td class="py-2 px-2 text-center">
-                <span class="inline-flex gap-1 font-bold text-[9px]">
-                  <span class="bg-accEmerald text-white px-1.5 py-0.5 rounded">V</span>
-                  <span class="bg-accEmerald text-white px-1.5 py-0.5 rounded">R</span>
-                  <span class="bg-accEmerald text-white px-1.5 py-0.5 rounded">I</span>
-                  <span class="bg-accEmerald text-white px-1.5 py-0.5 rounded">O</span>
-                </span>
-              </td>
-              <td class="py-2 px-3">
-                <span class="bg-emerald-100 text-emerald-900 font-bold px-2 py-0.5 rounded text-[9.5px] border border-emerald-300">
-                  Sustained Advantage
-                </span>
-              </td>
-              <td class="py-2 px-3 text-zinc-700">
-                129 clients with &gt;$100M quarterly bookings create socially complex switching costs (Accenture, 2025).
-              </td>
-            </tr>
-            <tr>
-              <td class="py-2 px-3 font-bold text-accBlack">2. 779,000+ Headcount Delivery Engine</td>
-              <td class="py-2 px-2 text-center">
-                <span class="inline-flex gap-1 font-bold text-[9px]">
-                  <span class="bg-accEmerald text-white px-1.5 py-0.5 rounded">V</span>
-                  <span class="bg-zinc-200 text-zinc-600 px-1.5 py-0.5 rounded">R</span>
-                  <span class="bg-zinc-200 text-zinc-600 px-1.5 py-0.5 rounded">I</span>
-                  <span class="bg-accEmerald text-white px-1.5 py-0.5 rounded">O</span>
-                </span>
-              </td>
-              <td class="py-2 px-3">
-                <span class="bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded text-[9.5px] border border-amber-300">
-                  Competitive Parity / Risk
-                </span>
-              </td>
-              <td class="py-2 px-3 text-zinc-700">
-                779k workforce faces fixed-cost margin vulnerability as GenAI automates routine delivery (Accenture, 2025).
-              </td>
-            </tr>
-            <tr>
-              <td class="py-2 px-3 font-bold text-accBlack">3. Proprietary AI Platforms <span class="text-accPurple font-semibold">[SynOps / LearnVantage]</span></td>
-              <td class="py-2 px-2 text-center">
-                <span class="inline-flex gap-1 font-bold text-[9px]">
-                  <span class="bg-accEmerald text-white px-1.5 py-0.5 rounded">V</span>
-                  <span class="bg-accEmerald text-white px-1.5 py-0.5 rounded">R</span>
-                  <span class="bg-zinc-200 text-zinc-600 px-1.5 py-0.5 rounded">I</span>
-                  <span class="bg-accEmerald text-white px-1.5 py-0.5 rounded">O</span>
-                </span>
-              </td>
-              <td class="py-2 px-3">
-                <span class="bg-accPurpleLight text-accPurple font-bold px-2 py-0.5 rounded text-[9.5px] border border-purple-300">
-                  Temporary Advantage
-                </span>
-              </td>
-              <td class="py-2 px-3 text-zinc-700">
-                $3B AI investment generated $5.9B FY25 GenAI bookings, though rivals rapidly imitate modular IP.
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- PANEL 4: TOP 3 CONTEMPORARY MARKETING ISSUES -->
-    <section class="shrink-0">
-      <div class="flex items-center justify-between mb-2">
-        <h2 class="text-xs font-extrabold uppercase tracking-wider text-accBlack flex items-center gap-1.5">
-          <span class="w-2 h-3.5 bg-accPurple inline-block rounded-sm"></span>
-          04. Top 3 Contemporary B2B Marketing Issues
-        </h2>
-        <span class="text-[9px] font-bold text-zinc-500 uppercase">Value Capture &amp; Go-To-Market</span>
-      </div>
-
-      <div class="grid grid-cols-3 gap-3.5">
-        <!-- Card 1 -->
-        <div class="bg-accGrey p-3.5 rounded-xl border-t-4 border-accPurple shadow-sm flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-1.5">
-              <span class="text-[9.5px] font-black text-accPurple uppercase tracking-wider">01 // Pricing (Hinterhuber, 2008)</span>
-              <span class="w-5 h-5 rounded-full bg-accPurple text-white text-[10px] font-bold flex items-center justify-center">£</span>
-            </div>
-            <h3 class="text-xs font-extrabold text-accBlack mb-1">Headcount Decoupling &amp; Pricing Shift</h3>
-            <p class="text-[10.3px] text-zinc-700 leading-relaxed">
-              Transitioning B2B revenue models from billable hours to value-based, outcome-linked, and recurring AI-asset licensing contracts without cannibalising core managed services.
-            </p>
-          </div>
+      <div class="grid grid-cols-12 gap-4">
+        <!-- Explanation Narrative -->
+        <div class="col-span-7 space-y-2.5 text-[11px] leading-relaxed text-zinc-800">
+          <p>
+            <strong class="text-accBlack font-bold">The Old Model:</strong>
+            For decades, Accenture scaled by hiring more consultants and billing clients by the hour (time-and-materials).
+          </p>
+          <p>
+            <strong class="text-accBlack font-bold">The AI Shock:</strong>
+            Autonomous AI agents automate routine coding, cloud migrations, and testing in minutes. When a 500-hour enterprise project finishes in 5 hours with AI, billing by the hour destroys contract value (Gartner, 2025).
+          </p>
+          <p>
+            <strong class="text-accBlack font-bold">Asset to Liability:</strong>
+            779,000 employees create enormous fixed payroll costs. Scale flips from a competitive moat into a heavy fixed-cost trap as billable margins collapse (Porter, 2008).
+          </p>
         </div>
 
-        <!-- Card 2 -->
-        <div class="bg-accGrey p-3.5 rounded-xl border-t-4 border-accBlack shadow-sm flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-1.5">
-              <span class="text-[9.5px] font-black text-accBlack uppercase tracking-wider">02 // Channel (Porter, 2008)</span>
-              <span class="w-5 h-5 rounded-full bg-accBlack text-white text-[10px] font-bold flex items-center justify-center">⇄</span>
-            </div>
-            <h3 class="text-xs font-extrabold text-accBlack mb-1">Ecosystem Disintermediation</h3>
-            <p class="text-[10.3px] text-zinc-700 leading-relaxed">
-              SaaS vendors (Salesforce, ServiceNow) and hyperscalers increasingly embed zero-code agentic workflows directly into enterprise stacks, threatening to bypass systems integrators.
-            </p>
-          </div>
-        </div>
+        <!-- Visual Layperson Comparison Box -->
+        <div class="col-span-5 bg-white p-3.5 rounded-lg border border-zinc-300 flex flex-col justify-between">
+          <span class="text-[9.5px] font-black uppercase text-zinc-500 tracking-wider block mb-1">
+            Visualizing The Margin Collapse
+          </span>
 
-        <!-- Card 3 -->
-        <div class="bg-accGrey p-3.5 rounded-xl border-t-4 border-accEmerald shadow-sm flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-1.5">
-              <span class="text-[9.5px] font-black text-accEmerald uppercase tracking-wider">03 // Trust (Gartner, 2025)</span>
-              <span class="w-5 h-5 rounded-full bg-accEmerald text-white text-[10px] font-bold flex items-center justify-center">✓</span>
+          <div class="bg-zinc-100 p-2.5 rounded border border-zinc-200 mb-2.5">
+            <div class="flex justify-between items-center text-[10.5px]">
+              <span class="font-bold text-zinc-800">Old Model (Human Hours)</span>
+              <span class="font-extrabold text-accBlack">£15,000</span>
             </div>
-            <h3 class="text-xs font-extrabold text-accBlack mb-1">B2B AI Governance &amp; Trust</h3>
-            <p class="text-[10.3px] text-zinc-700 leading-relaxed">
-              Positioning sovereign data security, EU AI Act compliance, and hallucination-free enterprise architecture as Accenture's primary brand differentiator for risk-averse boards.
-            </p>
+            <div class="text-[9.5px] text-zinc-500">100 hours @ £150/hr billable rate</div>
+            <div class="w-full bg-zinc-300 h-2 rounded-full mt-1.5 overflow-hidden">
+              <div class="bg-accBlack h-full w-full"></div>
+            </div>
+          </div>
+
+          <div class="bg-accRoseLight p-2.5 rounded border border-accRose/30">
+            <div class="flex justify-between items-center text-[10.5px]">
+              <span class="font-bold text-accRose">With AI Automation</span>
+              <span class="font-extrabold text-accRose">£750</span>
+            </div>
+            <div class="text-[9.5px] text-zinc-600">5 hours with AI @ £150/hr <span class="font-bold text-accRose">(-95% revenue drop)</span></div>
+            <div class="w-full bg-zinc-300 h-2 rounded-full mt-1.5 overflow-hidden">
+              <div class="bg-accRose h-full w-[5%]"></div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PANEL 5: STRATEGIC SYNTHESIS (THE 30-SECOND CEO TAKEAWAY) -->
+    <!-- CORE STRATEGIC PILLAR 2: THE SOLUTION (OUTCOME-BASED PIVOT) -->
+    <section class="bg-accGrey p-4.5 rounded-xl border-l-4 border-accEmerald shadow-sm shrink-0">
+      <div class="flex items-center justify-between border-b border-zinc-200 pb-2 mb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-md bg-accEmerald text-white font-extrabold text-xs flex items-center justify-center">02</span>
+          <h2 class="text-xs font-black uppercase tracking-wider text-accBlack">
+            The Strategic Pivot: Selling Outcomes Instead of Human Hours
+          </h2>
+        </div>
+        <span class="text-[9px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded uppercase">
+          Barney (1991) &amp; Hinterhuber (2008)
+        </span>
+      </div>
+
+      <div class="grid grid-cols-12 gap-4">
+        <!-- Explanation Narrative -->
+        <div class="col-span-7 space-y-2.5 text-[11px] leading-relaxed text-zinc-800">
+          <p>
+            <strong class="text-accBlack font-bold">Sell Value, Not Time:</strong>
+            Accenture must shift to value pricing—charging for guaranteed business outcomes (e.g., 20% cost cuts) and recurring AI software subscriptions (Hinterhuber, 2008).
+          </p>
+          <p>
+            <strong class="text-accBlack font-bold">The Boardroom Trust Moat:</strong>
+            Generic AI tools are commodities, but Fortune 100 boards fear data leaks and hallucinations. Accenture's relationships with 129 mega-clients (&gt;$100M each) provide an inimitable advantage offshore rivals cannot match (Barney, 1991; Accenture, 2025).
+          </p>
+          <p>
+            <strong class="text-accBlack font-bold">Scaling Proprietary IP:</strong>
+            By embedding proprietary platforms (SynOps and LearnVantage) into client systems, Accenture expands profits without needing hundreds of thousands of new employees.
+          </p>
+        </div>
+
+        <!-- Visual Layperson Solution Box -->
+        <div class="col-span-5 bg-white p-3.5 rounded-lg border border-zinc-300 flex flex-col justify-between">
+          <span class="text-[9.5px] font-black uppercase text-zinc-500 tracking-wider block mb-1">
+            The New Economic Engine
+          </span>
+
+          <div class="space-y-1.5 mb-2">
+            <div class="flex items-center justify-between bg-zinc-50 p-1.5 rounded border border-zinc-200 text-[10px]">
+              <span class="font-medium text-zinc-700">1. Boardroom Trust</span>
+              <span class="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">High Switching Cost</span>
+            </div>
+            <div class="flex items-center justify-between bg-zinc-50 p-1.5 rounded border border-zinc-200 text-[10px]">
+              <span class="font-medium text-zinc-700">2. Proprietary IP</span>
+              <span class="text-[9px] font-bold bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">$5.9B Bookings</span>
+            </div>
+            <div class="flex items-center justify-between bg-zinc-50 p-1.5 rounded border border-zinc-200 text-[10px]">
+              <span class="font-medium text-zinc-700">3. Outcome Pricing</span>
+              <span class="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Decoupled from Time</span>
+            </div>
+          </div>
+
+          <div class="bg-accEmeraldLight p-2 rounded border border-accEmerald/40 text-center">
+            <span class="text-[10px] font-extrabold text-emerald-900 block leading-tight">
+              New Engine: Proprietary IP + Value Pricing = Higher margins with zero headcount drag.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXECUTIVE VERDICT: 30-SECOND CEO TAKEAWAY -->
     <footer class="bg-accBlack text-white p-4 rounded-xl border-l-8 border-accPurple relative shrink-0">
-      <div class="flex items-center justify-between mb-2">
-        <span class="text-[10px] font-extrabold uppercase tracking-widest text-accPurple bg-white/10 px-2.5 py-0.5 rounded">
-          05. Strategic Synthesis // The 30-Second CEO Takeaway
+      <div class="flex items-center justify-between mb-1.5">
+        <span class="text-[10px] font-extrabold uppercase tracking-widest text-accPurple bg-white/10 px-2 py-0.5 rounded">
+          03. Executive Verdict // The 30-Second Bottom Line
         </span>
         <span class="text-[8.5px] text-zinc-400 font-medium">
-          Sources: Accenture (2025) • Barney (1991) • David et al. (2020) • Foy &amp; O'Dwyer (2024) • Gartner (2025) • Hinterhuber (2008) • IDC (2024) • Porter (2008)
+          Accenture (2025) • Barney (1991) • Gartner (2025) • Hinterhuber (2008) • Porter (2008)
         </span>
       </div>
 
-      <div class="grid grid-cols-4 gap-2.5 mb-2.5 text-[10px]">
-        <div class="bg-zinc-900 p-2 rounded border border-zinc-800">
-          <strong class="text-accPurple block uppercase text-[9px] tracking-wider">1. What is happening?</strong>
-          GenAI is collapsing traditional labour-arbitrage IT &amp; BPO margins.
-        </div>
-        <div class="bg-zinc-900 p-2 rounded border border-zinc-800">
-          <strong class="text-accPurple block uppercase text-[9px] tracking-wider">2. Why does it matter?</strong>
-          779k+ headcount risks flipping from scale advantage to fixed-cost liability.
-        </div>
-        <div class="bg-zinc-900 p-2 rounded border border-zinc-800">
-          <strong class="text-accPurple block uppercase text-[9px] tracking-wider">3. What does it mean?</strong>
-          Revenue growth must decouple from linear headcount expansion immediately.
-        </div>
-        <div class="bg-zinc-900 p-2 rounded border border-accEmerald/50">
-          <strong class="text-accEmerald block uppercase text-[9px] tracking-wider">4. So what?</strong>
-          Re-anchor brand equity around proprietary IP and guaranteed ROI outcomes.
-        </div>
-      </div>
-
-      <blockquote class="text-[11px] font-semibold text-zinc-100 leading-snug bg-gradient-to-r from-accPurple/25 to-transparent p-2 rounded border-l-2 border-accEmerald">
-        "Core Takeaway: To defend market leadership, Accenture must aggressively reposition its B2B brand from a labour-based systems integrator to an outcome-driven AI orchestrator—monetising proprietary platforms ($5.9B GenAI bookings), C-suite trust, and guaranteed transformation ROI."
+      <blockquote class="text-[11.2px] font-semibold text-zinc-100 leading-snug bg-zinc-900/90 p-2.5 rounded border-l-3 border-accEmerald">
+        <strong class="text-accEmerald">Takeaway:</strong> To defend leadership, Accenture must pivot from an IT labour supplier into an outcome-driven AI orchestrator—monetising C-suite trust and proprietary platforms ($5.9B bookings) to sell guaranteed results over human hours.
       </blockquote>
     </footer>
 
