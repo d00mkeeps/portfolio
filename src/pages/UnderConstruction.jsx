@@ -312,7 +312,7 @@ export default function UnderConstruction({ isAnticipateProp }) {
         )}
       </button>
 
-      <a href="https://anticipate.systems" className={styles.navLink}>
+      <a href="https://www.anticipate.systems" className={styles.navLink}>
         Anticipate
       </a>
 
