@@ -1,27 +1,54 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styles from './UnderConstruction.module.css'
 
-const STORAGE_POS_KEY = 'portfolio_audio_position'
+const SONGS = [
+  { id: 'track_1', src: '/audio/what-have-you-done-lately.mp3' },
+  { id: 'track_2', src: '/audio/why-do-you-play-with-my-mind.mp3' },
+  { id: 'track_3', src: '/audio/restless.mp3' },
+  { id: 'track_4', src: '/audio/livin-under-clouds.mp3' },
+]
+
+const STORAGE_INDEX_KEY = 'portfolio_audio_track_index'
 const STORAGE_STATE_KEY = 'portfolio_audio_state'
+const STORAGE_POS_PREFIX = 'portfolio_audio_pos_'
 
 export default function UnderConstruction() {
   const audioRef = useRef(null)
   const lastSavedTimeRef = useRef(0)
+  const targetTimeRef = useRef(0)
+
+  const [trackIndex, setTrackIndex] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_INDEX_KEY)
+      if (saved !== null) {
+        const parsed = parseInt(saved, 10)
+        return isNaN(parsed) ? 0 : parsed % SONGS.length
+      }
+    } catch (e) {}
+    return 0
+  })
+
+  const trackIndexRef = useRef(trackIndex)
+  useEffect(() => {
+    trackIndexRef.current = trackIndex
+  }, [trackIndex])
 
   const [isPlaying, setIsPlaying] = useState(false)
 
-  // Restore position and attempt autoplay if stored state was 'playing'
+  // Initial load
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
 
+    const initialTrack = SONGS[trackIndexRef.current]
+    const savedPos = parseFloat(localStorage.getItem(STORAGE_POS_PREFIX + initialTrack.id) || '0')
+    targetTimeRef.current = savedPos
+
     const handleLoadedMetadata = () => {
-      try {
-        const stored = parseFloat(localStorage.getItem(STORAGE_POS_KEY) || '0')
-        if (stored > 0 && stored < audio.duration) {
-          audio.currentTime = stored
-        }
-      } catch (e) {}
+      const target = targetTimeRef.current
+      if (target > 0 && target < audio.duration) {
+        audio.currentTime = target
+      }
     }
 
     audio.addEventListener('loadedmetadata', handleLoadedMetadata)
@@ -30,6 +57,7 @@ export default function UnderConstruction() {
       handleLoadedMetadata()
     }
 
+    // Try resume if state was 'playing'
     try {
       const prevListeningState = localStorage.getItem(STORAGE_STATE_KEY)
       if (prevListeningState === 'playing') {
@@ -44,21 +72,17 @@ export default function UnderConstruction() {
     const onBeforeUnload = () => {
       if (audio) {
         try {
-          localStorage.setItem(STORAGE_POS_KEY, audio.currentTime.toString())
+          localStorage.setItem(STORAGE_POS_PREFIX + SONGS[trackIndexRef.current].id, audio.currentTime.toString())
         } catch (e) {}
       }
     }
     window.addEventListener('beforeunload', onBeforeUnload)
 
-    // MediaSession setup
+    // MediaSession setup without metadata hints
     if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: 'What Have You Done Lately',
-        artist: 'Large Joints',
-        album: 'DRBAGAIN01',
-      })
+      navigator.mediaSession.metadata = null
       navigator.mediaSession.setActionHandler('play', () => {
-        audio.play().catch(() => {})
+        togglePlayPause()
       })
       navigator.mediaSession.setActionHandler('pause', () => {
         audio.pause()
@@ -79,11 +103,10 @@ export default function UnderConstruction() {
     if (!audio) return
     const now = audio.currentTime
 
-    // Persist position every 0.5s
     if (Math.abs(now - lastSavedTimeRef.current) >= 0.5) {
       lastSavedTimeRef.current = now
       try {
-        localStorage.setItem(STORAGE_POS_KEY, now.toString())
+        localStorage.setItem(STORAGE_POS_PREFIX + SONGS[trackIndexRef.current].id, now.toString())
       } catch (e) {}
     }
   }
@@ -100,19 +123,38 @@ export default function UnderConstruction() {
     try {
       localStorage.setItem(STORAGE_STATE_KEY, 'paused')
       if (audioRef.current) {
-        localStorage.setItem(STORAGE_POS_KEY, audioRef.current.currentTime.toString())
+        localStorage.setItem(STORAGE_POS_PREFIX + SONGS[trackIndexRef.current].id, audioRef.current.currentTime.toString())
       }
     } catch (e) {}
   }
 
-  const handleEnded = () => {
-    setIsPlaying(false)
+  const handleEnded = async () => {
     try {
-      localStorage.setItem(STORAGE_POS_KEY, '0')
-      localStorage.setItem(STORAGE_STATE_KEY, 'paused')
+      localStorage.setItem(STORAGE_POS_PREFIX + SONGS[trackIndexRef.current].id, '0')
     } catch (e) {}
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0
+
+    const nextIdx = (trackIndexRef.current + 1) % SONGS.length
+    trackIndexRef.current = nextIdx
+    setTrackIndex(nextIdx)
+    try {
+      localStorage.setItem(STORAGE_INDEX_KEY, nextIdx.toString())
+    } catch (e) {}
+
+    const nextTrack = SONGS[nextIdx]
+    const savedPos = parseFloat(localStorage.getItem(STORAGE_POS_PREFIX + nextTrack.id) || '0')
+    targetTimeRef.current = savedPos
+
+    const audio = audioRef.current
+    if (audio) {
+      audio.src = nextTrack.src
+      audio.load()
+      try {
+        await audio.play()
+        setIsPlaying(true)
+        localStorage.setItem(STORAGE_STATE_KEY, 'playing')
+      } catch (err) {
+        setIsPlaying(false)
+      }
     }
   }
 
@@ -123,12 +165,31 @@ export default function UnderConstruction() {
     if (isPlaying) {
       audio.pause()
     } else {
+      // If user had started before, advance to next track on resume
+      const hasPlayedBefore = localStorage.getItem(STORAGE_INDEX_KEY) !== null
+      let targetIdx = trackIndexRef.current
+
+      if (hasPlayedBefore) {
+        targetIdx = (trackIndexRef.current + 1) % SONGS.length
+        trackIndexRef.current = targetIdx
+        setTrackIndex(targetIdx)
+      }
+
       try {
-        const stored = parseFloat(localStorage.getItem(STORAGE_POS_KEY) || '0')
-        if (stored > 0 && Math.abs(audio.currentTime - stored) > 1 && stored < (audio.duration || 9999)) {
-          audio.currentTime = stored
-        }
+        localStorage.setItem(STORAGE_INDEX_KEY, targetIdx.toString())
+      } catch (e) {}
+
+      const track = SONGS[targetIdx]
+      const savedPos = parseFloat(localStorage.getItem(STORAGE_POS_PREFIX + track.id) || '0')
+      targetTimeRef.current = savedPos
+
+      audio.src = track.src
+      audio.load()
+
+      try {
         await audio.play()
+        setIsPlaying(true)
+        localStorage.setItem(STORAGE_STATE_KEY, 'playing')
       } catch (err) {
         console.error('Audio playback error:', err)
       }
@@ -178,7 +239,7 @@ export default function UnderConstruction() {
       {/* Hidden audio element without controls to prevent seeking */}
       <audio
         ref={audioRef}
-        src="/audio/what-have-you-done-lately.mp3"
+        src={SONGS[trackIndex].src}
         preload="metadata"
         onTimeUpdate={handleTimeUpdate}
         onPlay={handlePlay}
