@@ -25,51 +25,49 @@ export default function UnderConstruction({ isAnticipateProp }) {
 
   const audioRef = useRef(null)
   const lastSavedTimeRef = useRef(0)
-  const targetTimeRef = useRef(0)
-
-  const [trackIndex, setTrackIndex] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_INDEX_KEY)
-      if (saved !== null) {
-        const parsed = parseInt(saved, 10)
-        return isNaN(parsed) ? 0 : parsed % SONGS.length
-      }
-    } catch (e) {}
-    return 0
-  })
-
-  const trackIndexRef = useRef(trackIndex)
-  useEffect(() => {
-    trackIndexRef.current = trackIndex
-  }, [trackIndex])
+  const trackIndexRef = useRef(0)
+  const isSwitchingTrackRef = useRef(false)
 
   const [isPlaying, setIsPlaying] = useState(false)
 
-  // Audio setup — only on mileshillary.com (not anticipate)
+  // Initialize audio and restore previous state
   useEffect(() => {
     if (isAnticipate) return
 
     const audio = audioRef.current
     if (!audio) return
 
-    const initialTrack = SONGS[trackIndexRef.current]
-    const savedPos = parseFloat(localStorage.getItem(STORAGE_POS_PREFIX + initialTrack.id) || '0')
-    targetTimeRef.current = savedPos
+    let initialIdx = 0
+    try {
+      const saved = localStorage.getItem(STORAGE_INDEX_KEY)
+      if (saved !== null) {
+        const parsed = parseInt(saved, 10)
+        if (!isNaN(parsed)) initialIdx = parsed % SONGS.length
+      }
+    } catch (e) {}
 
-    const handleLoadedMetadata = () => {
-      const target = targetTimeRef.current
-      if (target > 0 && target < audio.duration) {
-        audio.currentTime = target
+    trackIndexRef.current = initialIdx
+    const initialTrack = SONGS[initialIdx]
+    const savedPos = parseFloat(localStorage.getItem(STORAGE_POS_PREFIX + initialTrack.id) || '0')
+
+    audio.src = initialTrack.src
+
+    const onLoadedMetadata = () => {
+      audio.removeEventListener('loadedmetadata', onLoadedMetadata)
+      if (savedPos > 0 && (!audio.duration || savedPos < audio.duration)) {
+        try {
+          audio.currentTime = savedPos
+        } catch (e) {}
       }
     }
 
-    audio.addEventListener('loadedmetadata', handleLoadedMetadata)
-
     if (audio.readyState >= 1) {
-      handleLoadedMetadata()
+      onLoadedMetadata()
+    } else {
+      audio.addEventListener('loadedmetadata', onLoadedMetadata)
     }
 
-    // Try resume if state was 'playing'
+    // Attempt resume if stored state was 'playing'
     try {
       const prevListeningState = localStorage.getItem(STORAGE_STATE_KEY)
       if (prevListeningState === 'playing') {
@@ -82,7 +80,7 @@ export default function UnderConstruction({ isAnticipateProp }) {
     } catch (e) {}
 
     const onBeforeUnload = () => {
-      if (audio) {
+      if (audio && !isSwitchingTrackRef.current) {
         try {
           localStorage.setItem(STORAGE_POS_PREFIX + SONGS[trackIndexRef.current].id, audio.currentTime.toString())
         } catch (e) {}
@@ -90,7 +88,7 @@ export default function UnderConstruction({ isAnticipateProp }) {
     }
     window.addEventListener('beforeunload', onBeforeUnload)
 
-    // MediaSession setup without metadata hints
+    // MediaSession setup without hints
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = null
       navigator.mediaSession.setActionHandler('play', () => {
@@ -105,14 +103,14 @@ export default function UnderConstruction({ isAnticipateProp }) {
     }
 
     return () => {
-      audio.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      audio.removeEventListener('loadedmetadata', onLoadedMetadata)
       window.removeEventListener('beforeunload', onBeforeUnload)
     }
   }, [isAnticipate])
 
   const handleTimeUpdate = () => {
     const audio = audioRef.current
-    if (!audio) return
+    if (!audio || isSwitchingTrackRef.current) return
     const now = audio.currentTime
 
     if (Math.abs(now - lastSavedTimeRef.current) >= 0.5) {
@@ -132,77 +130,132 @@ export default function UnderConstruction({ isAnticipateProp }) {
 
   const handlePause = () => {
     setIsPlaying(false)
-    try {
-      localStorage.setItem(STORAGE_STATE_KEY, 'paused')
-      if (audioRef.current) {
+    if (!isSwitchingTrackRef.current && audioRef.current) {
+      try {
+        localStorage.setItem(STORAGE_STATE_KEY, 'paused')
         localStorage.setItem(STORAGE_POS_PREFIX + SONGS[trackIndexRef.current].id, audioRef.current.currentTime.toString())
-      }
-    } catch (e) {}
+      } catch (e) {}
+    }
   }
 
-  const handleEnded = async () => {
+  const handleEnded = () => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    // Track finished naturally: reset its position to 0
     try {
       localStorage.setItem(STORAGE_POS_PREFIX + SONGS[trackIndexRef.current].id, '0')
     } catch (e) {}
 
+    // Auto-advance to next song
     const nextIdx = (trackIndexRef.current + 1) % SONGS.length
     trackIndexRef.current = nextIdx
-    setTrackIndex(nextIdx)
     try {
       localStorage.setItem(STORAGE_INDEX_KEY, nextIdx.toString())
     } catch (e) {}
 
     const nextTrack = SONGS[nextIdx]
     const savedPos = parseFloat(localStorage.getItem(STORAGE_POS_PREFIX + nextTrack.id) || '0')
-    targetTimeRef.current = savedPos
 
-    const audio = audioRef.current
-    if (audio) {
-      audio.src = nextTrack.src
-      audio.load()
-      try {
-        await audio.play()
-        setIsPlaying(true)
-        localStorage.setItem(STORAGE_STATE_KEY, 'playing')
-      } catch (err) {
-        setIsPlaying(false)
+    isSwitchingTrackRef.current = true
+    audio.src = nextTrack.src
+
+    const onLoadedMetadata = () => {
+      audio.removeEventListener('loadedmetadata', onLoadedMetadata)
+      if (savedPos > 0 && (!audio.duration || savedPos < audio.duration)) {
+        try {
+          audio.currentTime = savedPos
+        } catch (e) {}
       }
+      isSwitchingTrackRef.current = false
     }
+
+    if (audio.readyState >= 1) {
+      onLoadedMetadata()
+    } else {
+      audio.addEventListener('loadedmetadata', onLoadedMetadata)
+    }
+
+    audio.play().then(() => {
+      setIsPlaying(true)
+      try {
+        localStorage.setItem(STORAGE_STATE_KEY, 'playing')
+      } catch (e) {}
+    }).catch(err => {
+      console.error('Auto-advance playback error:', err)
+      setIsPlaying(false)
+      isSwitchingTrackRef.current = false
+    })
   }
 
-  const togglePlayPause = async () => {
+  const togglePlayPause = () => {
     const audio = audioRef.current
     if (!audio) return
 
     if (isPlaying) {
+      // User is pausing: save current position and pause
+      try {
+        localStorage.setItem(STORAGE_POS_PREFIX + SONGS[trackIndexRef.current].id, audio.currentTime.toString())
+        localStorage.setItem(STORAGE_STATE_KEY, 'paused')
+      } catch (e) {}
       audio.pause()
+      setIsPlaying(false)
     } else {
+      // User is resuming: advance to next song in cycle
       const hasPlayedBefore = localStorage.getItem(STORAGE_INDEX_KEY) !== null
       let targetIdx = trackIndexRef.current
 
       if (hasPlayedBefore) {
         targetIdx = (trackIndexRef.current + 1) % SONGS.length
-        trackIndexRef.current = targetIdx
-        setTrackIndex(targetIdx)
       }
 
+      trackIndexRef.current = targetIdx
       try {
         localStorage.setItem(STORAGE_INDEX_KEY, targetIdx.toString())
       } catch (e) {}
 
       const track = SONGS[targetIdx]
       const savedPos = parseFloat(localStorage.getItem(STORAGE_POS_PREFIX + track.id) || '0')
-      targetTimeRef.current = savedPos
 
-      audio.src = track.src
-      audio.load()
+      isSwitchingTrackRef.current = true
 
-      try {
-        await audio.play()
-        setIsPlaying(true)
-        localStorage.setItem(STORAGE_STATE_KEY, 'playing')
-      } catch (err) {
-        console.error('Audio playback error:', err)
+      const currentSrcPath = audio.src ? new URL(audio.src, window.location.href).pathname : ''
+      if (currentSrcPath !== track.src) {
+        audio.src = track.src
+      }
+
+      const applyPosition = () => {
+        if (savedPos > 0 && (!audio.duration || savedPos < audio.duration)) {
+          try {
+            audio.currentTime = savedPos
+          } catch (e) {}
+        }
+        isSwitchingTrackRef.current = false
+      }
+
+      if (audio.readyState >= 1) {
+        applyPosition()
+      } else {
+        const onMeta = () => {
+          audio.removeEventListener('loadedmetadata', onMeta)
+          applyPosition()
+        }
+        audio.addEventListener('loadedmetadata', onMeta)
+      }
+
+      // Synchronous play() call within click event for browser policy compliance
+      const playPromise = audio.play()
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          setIsPlaying(true)
+          try {
+            localStorage.setItem(STORAGE_STATE_KEY, 'playing')
+          } catch (e) {}
+        }).catch(err => {
+          console.error('Audio playback error:', err)
+          setIsPlaying(false)
+          isSwitchingTrackRef.current = false
+        })
       }
     }
   }
@@ -263,11 +316,10 @@ export default function UnderConstruction({ isAnticipateProp }) {
         Anticipate
       </a>
 
-      {/* Hidden audio element without controls to prevent seeking */}
+      {/* Hidden audio element without controls; src is managed imperatively without React reconciliation conflicts */}
       <audio
         ref={audioRef}
-        src={SONGS[trackIndex].src}
-        preload="metadata"
+        preload="auto"
         onTimeUpdate={handleTimeUpdate}
         onPlay={handlePlay}
         onPause={handlePause}
