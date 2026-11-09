@@ -12,7 +12,17 @@ const STORAGE_INDEX_KEY = 'portfolio_audio_track_index'
 const STORAGE_STATE_KEY = 'portfolio_audio_state'
 const STORAGE_POS_PREFIX = 'portfolio_audio_pos_'
 
-export default function UnderConstruction() {
+export default function UnderConstruction({ isAnticipateProp }) {
+  const isAnticipate =
+    Boolean(isAnticipateProp) ||
+    (typeof window !== 'undefined' &&
+      (window.location.hostname.includes('anticipate') ||
+        window.location.pathname.startsWith('/anticipate')))
+
+  useEffect(() => {
+    document.title = isAnticipate ? 'Pending!' : 'Under Construction — Miles Hillary'
+  }, [isAnticipate])
+
   const audioRef = useRef(null)
   const lastSavedTimeRef = useRef(0)
   const targetTimeRef = useRef(0)
@@ -35,8 +45,10 @@ export default function UnderConstruction() {
 
   const [isPlaying, setIsPlaying] = useState(false)
 
-  // Initial load
+  // Audio setup — only on mileshillary.com (not anticipate)
   useEffect(() => {
+    if (isAnticipate) return
+
     const audio = audioRef.current
     if (!audio) return
 
@@ -96,7 +108,7 @@ export default function UnderConstruction() {
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata)
       window.removeEventListener('beforeunload', onBeforeUnload)
     }
-  }, [])
+  }, [isAnticipate])
 
   const handleTimeUpdate = () => {
     const audio = audioRef.current
@@ -165,7 +177,6 @@ export default function UnderConstruction() {
     if (isPlaying) {
       audio.pause()
     } else {
-      // If user had started before, advance to next track on resume
       const hasPlayedBefore = localStorage.getItem(STORAGE_INDEX_KEY) !== null
       let targetIdx = trackIndexRef.current
 
@@ -198,6 +209,7 @@ export default function UnderConstruction() {
 
   // Spacebar toggle
   useEffect(() => {
+    if (isAnticipate) return
     const handleKeyDown = (e) => {
       if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
         e.preventDefault()
@@ -206,7 +218,18 @@ export default function UnderConstruction() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isPlaying])
+  }, [isPlaying, isAnticipate])
+
+  if (isAnticipate) {
+    return (
+      <main className={styles.wrapper}>
+        <h1 className={styles.headline}>Pending!</h1>
+        <a href="https://mileshillary.com" className={styles.navLink}>
+          Back
+        </a>
+      </main>
+    )
+  }
 
   return (
     <main className={styles.wrapper}>
@@ -235,6 +258,10 @@ export default function UnderConstruction() {
           </>
         )}
       </button>
+
+      <a href="https://anticipate.systems" className={styles.navLink}>
+        Anticipate
+      </a>
 
       {/* Hidden audio element without controls to prevent seeking */}
       <audio

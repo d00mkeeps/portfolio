@@ -68,3 +68,19 @@
 .btnIcon {
   display: block;
 }
+
+.navLink {
+  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-size: 0.85rem;
+  color: var(--text-muted, #666460);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px dotted transparent;
+}
+
+.navLink:hover {
+  color: var(--text, #efefed);
+  border-bottom-color: var(--text-muted, #666460);
+}
