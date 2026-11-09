@@ -4,51 +4,24 @@ import styles from './UnderConstruction.module.css'
 const STORAGE_POS_KEY = 'portfolio_audio_position'
 const STORAGE_STATE_KEY = 'portfolio_audio_state'
 
-function formatTime(seconds) {
-  if (isNaN(seconds) || seconds < 0) return '00:00'
-  const mins = Math.floor(seconds / 60)
-  const secs = Math.floor(seconds % 60)
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-}
-
 export default function UnderConstruction() {
   const audioRef = useRef(null)
   const lastSavedTimeRef = useRef(0)
 
   const [isPlaying, setIsPlaying] = useState(false)
-  const [duration, setDuration] = useState(0)
-  const [currentTime, setCurrentTime] = useState(() => {
-    try {
-      const saved = parseFloat(localStorage.getItem(STORAGE_POS_KEY) || '0')
-      return isNaN(saved) ? 0 : saved
-    } catch {
-      return 0
-    }
-  })
-  const [savedState, setSavedState] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_STATE_KEY) || 'paused'
-    } catch {
-      return 'paused'
-    }
-  })
 
-  // Restore position and attempt autoplay if state was 'playing'
+  // Restore position and attempt autoplay if stored state was 'playing'
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
 
     const handleLoadedMetadata = () => {
-      setDuration(audio.duration)
       try {
         const stored = parseFloat(localStorage.getItem(STORAGE_POS_KEY) || '0')
         if (stored > 0 && stored < audio.duration) {
           audio.currentTime = stored
-          setCurrentTime(stored)
         }
-      } catch (e) {
-        // ignore
-      }
+      } catch (e) {}
     }
 
     audio.addEventListener('loadedmetadata', handleLoadedMetadata)
@@ -57,21 +30,16 @@ export default function UnderConstruction() {
       handleLoadedMetadata()
     }
 
-    // If stored state was playing, try to resume
     try {
       const prevListeningState = localStorage.getItem(STORAGE_STATE_KEY)
       if (prevListeningState === 'playing') {
         audio.play().then(() => {
           setIsPlaying(true)
-          setSavedState('playing')
         }).catch(() => {
-          // Autoplay blocked without user gesture
           setIsPlaying(false)
         })
       }
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
 
     const onBeforeUnload = () => {
       if (audio) {
@@ -82,7 +50,7 @@ export default function UnderConstruction() {
     }
     window.addEventListener('beforeunload', onBeforeUnload)
 
-    // MediaSession API setup
+    // MediaSession setup
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: 'What Have You Done Lately',
@@ -95,7 +63,6 @@ export default function UnderConstruction() {
       navigator.mediaSession.setActionHandler('pause', () => {
         audio.pause()
       })
-      // Disallow seeking / skipping forward and back
       navigator.mediaSession.setActionHandler('seekto', null)
       navigator.mediaSession.setActionHandler('seekforward', null)
       navigator.mediaSession.setActionHandler('seekbackward', null)
@@ -111,9 +78,8 @@ export default function UnderConstruction() {
     const audio = audioRef.current
     if (!audio) return
     const now = audio.currentTime
-    setCurrentTime(now)
 
-    // Save position to localStorage
+    // Persist position every 0.5s
     if (Math.abs(now - lastSavedTimeRef.current) >= 0.5) {
       lastSavedTimeRef.current = now
       try {
@@ -124,7 +90,6 @@ export default function UnderConstruction() {
 
   const handlePlay = () => {
     setIsPlaying(true)
-    setSavedState('playing')
     try {
       localStorage.setItem(STORAGE_STATE_KEY, 'playing')
     } catch (e) {}
@@ -132,7 +97,6 @@ export default function UnderConstruction() {
 
   const handlePause = () => {
     setIsPlaying(false)
-    setSavedState('paused')
     try {
       localStorage.setItem(STORAGE_STATE_KEY, 'paused')
       if (audioRef.current) {
@@ -143,8 +107,6 @@ export default function UnderConstruction() {
 
   const handleEnded = () => {
     setIsPlaying(false)
-    setCurrentTime(0)
-    setSavedState('paused')
     try {
       localStorage.setItem(STORAGE_POS_KEY, '0')
       localStorage.setItem(STORAGE_STATE_KEY, 'paused')
@@ -173,7 +135,7 @@ export default function UnderConstruction() {
     }
   }
 
-  // Keyboard shortcut: Space toggles play/pause
+  // Spacebar toggle
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
@@ -185,63 +147,35 @@ export default function UnderConstruction() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isPlaying])
 
-  const buttonLabel = isPlaying
-    ? 'Pause'
-    : currentTime > 0
-    ? 'Resume'
-    : 'Play'
-
   return (
     <main className={styles.wrapper}>
       <h1 className={styles.headline}>Under Construction!</h1>
 
-      <div className={styles.card}>
-        <div className={styles.cardHeader}>
-          <span className={styles.tag}>Now Spinning</span>
-          <div className={styles.statusPill}>
-            <span className={`${styles.statusDot} ${isPlaying ? styles.statusPlaying : styles.statusPaused}`} />
-            <span className={styles.statusText}>{isPlaying ? 'Playing' : 'Paused'}</span>
-          </div>
-        </div>
+      <button
+        type="button"
+        onClick={togglePlayPause}
+        className={`${styles.playButton} ${isPlaying ? styles.buttonPlaying : ''}`}
+        aria-label={isPlaying ? 'Pause' : 'Play'}
+      >
+        {isPlaying ? (
+          <>
+            <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+              <rect x="6" y="4" width="4" height="16" rx="1" />
+              <rect x="14" y="4" width="4" height="16" rx="1" />
+            </svg>
+            <span>Pause</span>
+          </>
+        ) : (
+          <>
+            <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            <span>Play</span>
+          </>
+        )}
+      </button>
 
-        <div className={styles.trackInfo}>
-          <div className={styles.title}>What Have You Done Lately</div>
-          <div className={styles.artist}>Large Joints</div>
-        </div>
-
-        <button
-          type="button"
-          onClick={togglePlayPause}
-          className={`${styles.playButton} ${isPlaying ? styles.buttonPlaying : ''}`}
-          aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
-        >
-          {isPlaying ? (
-            <>
-              <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                <rect x="6" y="4" width="4" height="16" rx="1" />
-                <rect x="14" y="4" width="4" height="16" rx="1" />
-              </svg>
-              <span>Pause</span>
-            </>
-          ) : (
-            <>
-              <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              <span>{buttonLabel}</span>
-            </>
-          )}
-        </button>
-
-        <div className={styles.metaRow}>
-          <span className={styles.timeDisplay}>
-            {formatTime(currentTime)} / {duration > 0 ? formatTime(duration) : '07:01'}
-          </span>
-          <span className={styles.savedNotice}>Position saved</span>
-        </div>
-      </div>
-
-      {/* Hidden audio element with strictly no controls to prevent seeking */}
+      {/* Hidden audio element without controls to prevent seeking */}
       <audio
         ref={audioRef}
         src="/audio/what-have-you-done-lately.mp3"

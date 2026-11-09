@@ -11,6 +11,7 @@
   font-family: var(--font-mono, 'DM Mono', monospace);
   box-sizing: border-box;
   user-select: none;
+  gap: 1.75rem;
 }
 
 .headline {
@@ -18,109 +19,24 @@
   font-size: clamp(2rem, 5.5vw, 3.5rem);
   font-weight: 500;
   letter-spacing: -0.03em;
-  margin: 0 0 2.5rem 0;
+  margin: 0;
   color: var(--text, #efefed);
   text-align: center;
   line-height: 1.1;
 }
 
-.card {
-  width: 100%;
-  max-width: 400px;
-  background: var(--surface, #0f0f0f);
-  border: 1px solid var(--border-bright, #272727);
-  border-radius: 4px;
-  padding: 1.75rem;
-  box-sizing: border-box;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
-}
-
-.cardHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.25rem;
-}
-
-.tag {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-muted, #666460);
-  font-weight: 500;
-}
-
-.statusPill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.72rem;
-  color: var(--text-muted, #666460);
-}
-
-.statusDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
-.statusPlaying {
-  background-color: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
-  animation: pulse 1.8s infinite;
-}
-
-.statusPaused {
-  background-color: #666460;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.95);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.15);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.95);
-    opacity: 0.8;
-  }
-}
-
-.trackInfo {
-  margin-bottom: 1.5rem;
-}
-
-.title {
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: var(--text, #efefed);
-  margin-bottom: 0.25rem;
-  letter-spacing: -0.01em;
-  line-height: 1.35;
-}
-
-.artist {
-  font-size: 0.85rem;
-  color: var(--text-muted, #666460);
-}
-
 .playButton {
-  width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  padding: 0.85rem 1.25rem;
+  padding: 0.75rem 1.6rem;
   background-color: var(--text, #efefed);
   color: var(--bg, #080808);
   border: 1px solid var(--text, #efefed);
   border-radius: 2px;
   font-family: var(--font-mono, 'DM Mono', monospace);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: 0.02em;
   cursor: pointer;
@@ -132,7 +48,6 @@
   background-color: #ffffff;
   border-color: #ffffff;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.12);
 }
 
 .playButton:active {
@@ -148,31 +63,8 @@
 .buttonPlaying:hover {
   background-color: rgba(255, 255, 255, 0.05);
   border-color: var(--text-muted, #666460);
-  box-shadow: none;
 }
 
 .btnIcon {
   display: block;
-}
-
-.metaRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border, #1a1a1a);
-  font-size: 0.75rem;
-  color: var(--text-muted, #666460);
-}
-
-.timeDisplay {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-}
-
-.savedNotice {
-  font-size: 0.68rem;
-  opacity: 0.8;
-  letter-spacing: 0.03em;
 }
